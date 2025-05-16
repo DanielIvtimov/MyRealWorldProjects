@@ -1,0 +1,16 @@
+.openEndedContainer {
+    margin-top: -12px;
+}
+
+.openEndedTextarea {
+    width: calc(100% - 20px);
+    font-size: 13px; 
+    color: black; 
+    outline: none; 
+    background-color: rgba(226, 232, 240, 0.8); 
+    padding: 8px;
+    margin-top: 8px; 
+    border: none;
+    border-radius: 6px;
+    resize: vertical; 
+}

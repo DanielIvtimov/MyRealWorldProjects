@@ -1,0 +1,37 @@
+.optionButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.selectedOption {
+    color: white;
+    background-color: #04ACC9;
+    border-color: #38bdf8;
+}
+
+.unselectedOption {
+    color: black;
+    background-color: #E3E7EE;
+    border-color: #e2e8f0;
+}
+
+.radioIconSelected {
+    font-size: 1.125rem;
+    color: white;
+}
+
+.radioIconUnselected {
+    font-size: 1.125rem;
+    color: #8d8d8d;
+}
+
+.optionLabel {
+    font-size: 13px;
+}

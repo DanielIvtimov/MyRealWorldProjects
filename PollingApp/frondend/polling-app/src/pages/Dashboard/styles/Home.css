@@ -1,0 +1,17 @@
+.header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.info-text {
+    font-size: 0.875rem;
+    color: #04ACC9;
+    font-weight: 500;
+    text-align: center;
+    padding: 0.75rem;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+}

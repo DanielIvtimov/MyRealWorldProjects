@@ -1,0 +1,33 @@
+@media (max-width: 1080){
+    .hide-on-small{
+        display: none;
+    }
+    
+}
+
+.dashboard-container {
+    display: flex;
+}
+
+.dashboard-content {
+    flex-grow: 1;
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+}
+
+.user-details-container {
+    display: none;
+    margin-right: 1.25rem;
+}
+
+@media (min-width: 768px){
+    .user-details-container{
+        display: block;
+    }
+}
+
+@media (max-width: 1024px){
+    .hide-on-small {
+      display: none;
+    }
+  }

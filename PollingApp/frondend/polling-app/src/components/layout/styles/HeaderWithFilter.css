@@ -1,0 +1,73 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: black;
+}
+
+.icon-large {
+    font-size: 18px;
+}
+
+.filter-button {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   font-size: 14px;
+   color: white;
+   background-color: #04ACC9;
+   padding: 8px 16px;
+   border: none;
+   cursor: pointer;
+   border-radius: 8px;
+   transition: border-radius 0.2s ease-in-out;
+}
+
+.filter-button:hover {
+    opacity: 0.9;
+}
+
+.filter-button.open {
+    border-radius: 8px 8px 0 0;
+    padding-bottom: 45px;
+}
+
+.filter-option-button {
+    font-size: 17px;
+    padding: 4px 16px;
+    border-radius: 8px;
+    white-space: nowrap;
+    background-color: #e0f2fe;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.filter-option-button.active {
+    background-color: #0c4a6e;
+    color: white;
+}
+
+.filter-options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    background-color: #04ACC9;
+    padding: 16px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+@media (max-width: 640px){
+    .header-title{
+        font-size: 1.125rem;
+    }
+}
+

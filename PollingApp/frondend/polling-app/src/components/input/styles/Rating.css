@@ -1,0 +1,25 @@
+.ratingIcon {
+    font-size: 1.875rem;
+    transition: color 0.3s ease;
+}
+
+.ratingWrapper {
+    display: flex;
+    grid: 8px;
+}
+
+.readOnly {
+    cursor: default;
+}
+
+.interactive {
+    cursor: pointer;
+}
+
+.filled {
+    color: #fbbf24;
+}
+
+.empty {
+    color: #d1d5db;
+}

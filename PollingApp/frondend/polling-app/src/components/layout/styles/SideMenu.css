@@ -1,0 +1,35 @@
+.side-menu-container {
+    width: 16rem;
+    height: calc(100vh - 61px);
+    background-color: rgba(248, 250, 252, 0.5);
+    border-right: 1px solid rgba(241, 245, 249, 0.7);
+    padding: 1.25rem;
+    position: sticky;
+    top: 61px;
+    z-index: 20;
+}
+
+.menu-button {
+    width: 100%; 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    font-size: 15px; 
+    padding: 1rem 1.5rem; 
+    border-radius: 9999px; 
+    margin-bottom: 0.75rem; 
+    background-color: transparent; 
+    color: inherit; 
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+.menu-button.active {
+    background-color: #04ACC9;
+    color: white; 
+}
+
+.menu-icon {
+    font-size: 1.25rem;
+}

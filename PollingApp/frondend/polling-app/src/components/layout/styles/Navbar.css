@@ -1,0 +1,44 @@
+.navbar-container {
+    display: flex;
+    gap: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(248, 250, 252, 0.5);
+    backdrop-filter: blur(2px);
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+}
+
+.navbar-title {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: black;
+}
+
+.menu-toggle-button {
+    display: block;
+    color: black;
+    border: none;
+    background-color: rgba(248, 250, 252, 0.5);
+  }
+
+.menu-toggle-icon {
+    font-size: 24px;
+}
+
+.small-screen-side-menu {
+    position: fixed;
+    top: 90px; 
+    left: 0;
+    width: 16rem;
+    height: calc(100vh - 61px);
+    background-color: white;
+    z-index: 10; 
+}
+  
+@media (min-width: 1024px){
+    .menu-toggle-button {
+        display: none;
+    }
+}

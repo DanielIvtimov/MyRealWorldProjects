@@ -1,0 +1,12 @@
+.char-avatar {
+    width: 80px; 
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #1a202c;
+    font-weight: 600; 
+    font-size: 30px;
+    background-color: #f7fafc;
+}
