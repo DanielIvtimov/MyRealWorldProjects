@@ -2,6 +2,9 @@ import React from 'react'
 import "./styles/Modal.css"
 
 const Modal = ({children, isOpen, onClose, title, hideHeader}) => {
+
+    if(!isOpen) return null;
+
   return (
     <div className="modal-overlay">
         {/* Modal Content */}
