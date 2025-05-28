@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import "./styles/Login.css"
 import Input from '../../components/Inputs/Input';
+import { validateEmail } from '../../utils/helper';
 
 const Login = ({setCurrentPage}) => {
 
@@ -12,7 +13,31 @@ const Login = ({setCurrentPage}) => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.praventDefault();
+    e.preventDefault();
+
+    if(!validateEmail(email)){
+      setError("Please enter a valid email adress.");
+      return;
+    }
+
+    if(!password){
+      setError("Please enter the password");
+      return;
+    }
+
+    setError("");
+
+    //Login API call;
+    try{
+      
+    }catch(error){
+      //Properties from backend server.
+      if(error.response && error.response.data.message){
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (
