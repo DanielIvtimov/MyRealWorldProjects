@@ -57,12 +57,14 @@
     margin-top: 12px;
 }
 
-.loggin-button {
+.button-loggin {
+    all: unset;
     font-weight: 500;
     color: #FF9324;
     text-decoration: underline;
     cursor: pointer;
     transition: color 0.3s ease;
+    display: inline;
 }
 
 @media (min-width: 768px) {

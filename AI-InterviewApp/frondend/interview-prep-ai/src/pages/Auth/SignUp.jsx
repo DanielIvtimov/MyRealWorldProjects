@@ -56,7 +56,7 @@ const SignUp = ({setCurrentPage, }) => {
         <p className="info-text">
           Already an account?{" "}
           <button
-            className="loggin-button"
+            className="button-loggin"
             onClick={() => {
               setCurrentPage("login")
             }}
