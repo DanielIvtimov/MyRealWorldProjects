@@ -3,20 +3,20 @@ import { UserController } from "../controllers/authControllers.js";
 import userProtect from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
 
-const userRouter = express.Router();
+const userRoutes = express.Router();
 
 const userController = new UserController();
 
-userRouter.post("/register", async (request, response) => {
+userRoutes.post("/register", async (request, response) => {
     await userController.registerUser(request, response);
 });
-userRouter.post("/login", async (request, response) => {
+userRoutes.post("/login", async (request, response) => {
     await userController.loginUser(request, response);
 })
-userRouter.get("/profile", userProtect, async (request, response) => {
+userRoutes.get("/profile", userProtect, async (request, response) => {
     await userController.getUserProfile(request, response);
 })
-userRouter.post("/upload-image", upload.single("image"), async (request, response) => {
+userRoutes.post("/upload-image", upload.single("image"), async (request, response) => {
     if(!request.file){
         return response.status(400).json({message: "No file upload"});
     }
@@ -24,4 +24,4 @@ userRouter.post("/upload-image", upload.single("image"), async (request, respons
     return response.status(200).json({ imageUrl });
 })
 
-export default userRouter; 
+export default userRoutes; 

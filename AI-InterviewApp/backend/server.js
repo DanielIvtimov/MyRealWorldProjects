@@ -4,7 +4,8 @@ import path, { dirname } from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
-import authRouter from "./routes/authRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,8 +27,8 @@ app.use(
 app.use(express.json());
 
 //Routes Prefix
-app.use("/api/auth", authRouter);
-// app.use("/api/sessions", sessionRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/sessions", sessionRoutes);
 // app.use("/api/questions", questionRoutes);
 
 // app.use("/api/ai/generate-questions", protect, generateInterviewQuestions);

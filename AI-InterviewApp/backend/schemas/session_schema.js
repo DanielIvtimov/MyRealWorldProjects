@@ -15,8 +15,15 @@ const sessionSchema = new Schema({
         required: true,
     },
     topicsToFocus: {
-        type: mongoose.Schema.Types.ObjectId, ref: "Question",
+        type: String,
+        required: true,
     },
+    description: {
+        type: String,
+    },
+    questions: [{
+        type: mongoose.Schema.Types.ObjectId, ref: "Question"
+    }],
 }, {
     timestamps: true,
 });
