@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import questionRoutes from "./routes/questionRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,7 +30,7 @@ app.use(express.json());
 //Routes Prefix
 app.use("/api/auth", authRoutes);
 app.use("/api/sessions", sessionRoutes);
-// app.use("/api/questions", questionRoutes);
+app.use("/api/questions", questionRoutes);
 
 // app.use("/api/ai/generate-questions", protect, generateInterviewQuestions);
 // app.use("/api/ai/generate-explanation", protect, generateConceptExplanation);

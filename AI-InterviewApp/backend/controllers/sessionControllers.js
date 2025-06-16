@@ -1,6 +1,4 @@
 import { Session } from "../models/sessionModels.js";
-import { sessionMongoSchema } from "../schemas/session_schema.js";
-import { questionMongoSchema } from "../schemas/question_schema.js";
 
 
 export class SessionController{
