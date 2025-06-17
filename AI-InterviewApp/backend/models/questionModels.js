@@ -1,7 +1,5 @@
 import { sessionMongoSchema } from "../schemas/session_schema.js";
 import { questionMongoSchema } from "../schemas/question_schema.js";
-import { request, response } from "express";
-import { createPartFromFunctionResponse } from "@google/genai";
 
 export class Question{
     async addQuestionToSession({sessionId, questions}){
