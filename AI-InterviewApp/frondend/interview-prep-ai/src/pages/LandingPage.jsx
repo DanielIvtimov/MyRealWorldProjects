@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import HERO_IMG from "../../src/assets/hero-img.png";
 import { API_FEATURES } from "../utils/data";
 import { useNavigate } from "react-router-dom";
 import "./styles/LadingPage.css";
 import { LuSparkles } from "react-icons/lu";
 import Modal from "../components/Modal";
-import Login from "./Auth/Login"
+import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
+import { UserContext } from "../context/userContext";
+import ProfileInfoCard from "../components/Cards/ProfileInfoCard";
 
 const LandingPage = () => {
+  const { user } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const [openAuthModel, setOpenAuthModel] = useState(false);
   const [currentPage, setCurrentPage] = useState("login");
 
-  const handleCTA = () => {};
+  const handleCTA = () => {
+    if (!user) {
+      setOpenAuthModel(true);
+    } else {
+      navigate("/dashboard");
+    }
+  };
 
   return (
     <>
@@ -24,12 +34,16 @@ const LandingPage = () => {
           {/* Header */}
           <header className="header-custom">
             <div className="text-heading">Interview Prep AI</div>
-            <button
-              className="btn-login"
-              onClick={() => setOpenAuthModel(true)}
-            >
-              Login / Sign Up
-            </button>
+            {user ? (
+              <ProfileInfoCard />
+            ) : (
+              <button
+                className="btn-login"
+                onClick={() => setOpenAuthModel(true)}
+              >
+                Login / Sign Up
+              </button>
+            )}
           </header>
           {/* Hero Content */}
           <div className="hero-flex-container">
@@ -77,7 +91,9 @@ const LandingPage = () => {
                 {API_FEATURES.slice(0, 3).map((feature) => (
                   <div key={feature.id} className="features-card">
                     <h3 className="features-title">{feature.title}</h3>
-                    <p className="features-description">{feature.description}</p>
+                    <p className="features-description">
+                      {feature.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -85,7 +101,9 @@ const LandingPage = () => {
                 {API_FEATURES.slice(3).map((feature) => (
                   <div key={feature.id} className="features-card-partTwo">
                     <h3 className="features-title-partTwo">{feature.title}</h3>
-                    <p className="features-description-partTwo">{feature.description}</p>
+                    <p className="features-description-partTwo">
+                      {feature.description}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -103,14 +121,12 @@ const LandingPage = () => {
         }}
         hideHeader
       >
-      <div>
-        {currentPage === "login" && (
-          <Login setCurrentPage={setCurrentPage} />
-        )}
-        {currentPage === "signup" && (
-          <SignUp setCurrentPage={setCurrentPage} />
-        )}
-      </div>
+        <div>
+          {currentPage === "login" && <Login setCurrentPage={setCurrentPage} />}
+          {currentPage === "signup" && (
+            <SignUp setCurrentPage={setCurrentPage} />
+          )}
+        </div>
       </Modal>
     </>
   );

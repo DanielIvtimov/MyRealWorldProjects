@@ -20,7 +20,7 @@ userRoutes.post("/upload-image", upload.single("image"), async (request, respons
     if(!request.file){
         return response.status(400).json({message: "No file upload"});
     }
-    const imageUrl = `${request.protocol}://${request.get("host")}/uploads${request.file.filename}`;
+    const imageUrl = `${request.protocol}://${request.get("host")}/uploads/${request.file.filename}`;
     return response.status(200).json({ imageUrl });
 })
 
