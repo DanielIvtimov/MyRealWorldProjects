@@ -1,0 +1,71 @@
+.dashboard-container {
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 16px;
+    padding-top: 4px;
+    padding-bottom: 24px;
+    padding-left: 16px;
+    padding-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.dashboard-add-btn {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(to right, #FF9324, #e99a4b);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    padding-left: 28px;
+    padding-right: 28px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 9999px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+    z-index: 50;
+}
+
+.dashboard-add-btn:hover {
+    background: #FF9324;
+    color: #fff;
+    box-shadow: 0px 15px 25px #e99a4b;
+}
+
+.dashboard-btn-icon {
+    font-size: 24px;
+    color: white;
+    margin-right: 8px;
+}
+
+@media (min-width: 768px){
+    .dashboard-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 28px;
+        padding-left: 0;
+        padding-bottom: 0;
+    }
+    .dashboard-add-btn {
+        bottom: 80px;
+        right: 80px;
+    }
+}

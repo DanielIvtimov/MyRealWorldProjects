@@ -15,7 +15,8 @@ const ProfileInfoCard = () => {
     }
 
   return (
-    <div className="profile-info-row">
+    user && (
+        <div className="profile-info-row">
         <img src={user.profileImageUrl} alt="" className="profile-image" />
         <div>
             <div className="profile-name">
@@ -24,6 +25,7 @@ const ProfileInfoCard = () => {
             <button className="profile-logout-button" onClick={handleLogout}>Logout</button>
         </div>
     </div>
+    )
   )
 }
 
