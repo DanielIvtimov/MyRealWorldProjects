@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Input from "../../components/Inputs/Input";
 import "./styles/CreateSessionForm.css"
 import SpinnerLoader from '../../components/Loader/SpinnerLoader';
+import axiosInstace from '../../utils/axiosInstace';
+import { API_PATHS } from '../../utils/apiPaths';
 
 const CreateSessionForm = () => {
 
@@ -31,7 +33,25 @@ const CreateSessionForm = () => {
             setError("Please fill all the required fields");
             return;
         }
-        setError("");   
+        setError("");
+        setIsLoading(true);
+        
+        try{
+           const aiResponse = await axiosInstace.post(API_PATHS.AI.GENERATE_QUESTIONS, {role, experience, topicsToFocus, numberOfQuestions: 10});
+           const generatedQuestions = aiResponse.data;
+           const response = await axiosInstace.post(API_PATHS.SESSION.CREATE, {...formData, questions: generatedQuestions});
+           if(response.data?.session?._id){
+            navigate(`/interview-prep/${response.data?.session?._id}`);
+           }
+        }catch(error){
+            if(error.response && error.response.data.message){
+                setError(error.response.data.message);
+            } else {
+                setError("Something went wrong. Please try again");
+            }
+        } finally {
+            setIsLoading(false);
+        }
     }
 
   return (

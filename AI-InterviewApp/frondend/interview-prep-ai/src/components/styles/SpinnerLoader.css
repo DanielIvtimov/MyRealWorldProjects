@@ -1,0 +1,23 @@
+.spinner-icon {
+    display: inline;
+    width: 20px;
+    height: 20px;
+    color: #e5e7eb;
+    fill: #164e63;
+    animation: spin 1s linear infinite;
+}
+
+@media (prefers-color-scheme: dark){
+    .spinner-icon {
+        color: #4b5563;
+    }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

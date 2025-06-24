@@ -54,6 +54,15 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.creat-session-createBtn:hover:not(:disabled) {
+  background-color: #CDB5AA; 
+}
+
+.creat-session-createBtn:disabled {
+  background-color: #CDB5AA; 
+  cursor: not-allowed;
+}
+
 @media (min-width: 768px){
     .create-session-container {
         width: 35vw;
