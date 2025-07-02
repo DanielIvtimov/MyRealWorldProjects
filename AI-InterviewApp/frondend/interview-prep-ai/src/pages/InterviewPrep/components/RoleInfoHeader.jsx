@@ -1,35 +1,37 @@
 import React from "react";
-import "../styles/RoleInfoHeader.css";
+import "./styles/RoleInfoHeader.css"
 
 const RoleInfoHeader = ({ role, topicsToFocus, experience, questions, description, lastUpdated }) => {
   return (
-    <div className="role-info-header-container">
-      <div className="container-custom">
-        <div className="role-info-header-content">
-          <div className="role-info-items">
-            <div className="flex-info-items-flex-grow">
-              <div className="role-info-header-row">
+    <div className="role-info-header">
+      <div className="role-info-header-container">
+        <div className="role-info-header-main">
+          <div className="role-info-header-details">
+            <div className="role-info-header-title-selection">
+              <div className="role-info-header-text"> 
                 <div>
-                  <h2 className="role-info-title">{role}</h2>
-                  <p className="role-info-subtitle">{topicsToFocus}</p>
+                  <h2 className="role-info-header-role-title">{role}</h2>
+                  <p className="role-info-header-topics">{topicsToFocus}</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="role-info-stats">
-            <div className="experience-badge">
-              Experience: {experience} {experience === 1 ? "Year" : "Years"}
-            </div>
-            <div className="question-badge">{questions} Q&A</div>
-            <div className="last-updated-badge">Last Updated {lastUpdated}</div>
+          <div className="role-info-header-stats-wrapper">
+            <div className="role-info-header-stats">
+              <div className="role-info-header-experience">
+                Experience: {experience} {experience === 1 ? "Year" : "Years"}
+              </div>
+              <div className="role-info-header-questions">{questions} Q&A</div>
+              <div className="role-info-header-updated">Last Updated {lastUpdated}</div>
+          </div>
           </div>
         </div>
       </div>
-      <div className="role-info-image-container">
-        <div className="blob-lime" />
-        <div className="blob-teal" />
-        <div className="blob-cyan" />
-        <div className="blob-fuchsia" />
+      <div className="role-info-header-spacers">
+        <div className="role-info-header-spacer spacer-lime" />
+        <div className="role-info-header-spacer spacer-teal" />
+        <div className="role-info-header-spacer spacer-cyan" />
+        <div className="role-info-header-spacer spacer-fuchsia" />
       </div>
     </div>
   );

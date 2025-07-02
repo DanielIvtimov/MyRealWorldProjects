@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'  
 import moment from 'moment'
 import { AnimatePresence, motion } from "framer-motion";
-import { LuCircle, LuListCollapse } from 'react-icons/lu'; 
+import { LuCircle, LuListCollapse } from 'react-icons/lu';  
 import SpinnerLoader from '../../components/Loader/SpinnerLoader';
 import { toast } from "react-hot-toast";
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import RoleInfoHeader from './components/RoleInfoHeader';
+import axiosInstace from '../../utils/axiosInstace';
+import { API_PATHS } from '../../utils/apiPaths';
+import "./styles/InterviewPrep.css"
+import QuestionCard from '../../components/Cards/QuestionCard';
 
 const InterviewPrep = () => {
 
@@ -21,7 +25,16 @@ const InterviewPrep = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdateLoader, setIsUpdateLoader] = useState(false);
 
-  const fetchSessionDetailedById = async () => {}
+  const fetchSessionDetailedById = async () => {
+    try{
+      const response = await axiosInstace.get(API_PATHS.SESSION.GET_ONE(sessionId));
+      if(response.data && response.data.session){
+        setSessionData(response.data.session);
+      }
+    }catch(error){
+      console.error("Error:", error);
+    }
+  }
 
   const generateConceptExplanation = async (question) => {}
 
@@ -42,10 +55,50 @@ const InterviewPrep = () => {
         role={sessionData?.role || ""}
         topicsToFocus={sessionData?.topicsToFocus || ""}
         experience={sessionData?.experience || "-"}
-        questions={sessionData?.questions || "-"}
+        questions={sessionData?.questions?.length || "-"}
         description={sessionData?.description || ""}
         lastUpdated={sessionData?.updatedAt ? moment(sessionData.updatedAt).format("Do MMM YYYY"): ""}
       />
+      <div className="interview-section">
+        <h2 className="interview-title">Interview Q & A</h2>
+        <div className="questions-wrapper">
+          <div className={`content-area ${openLeanMoreDrawer ? "with-drawer" : "no-drawer"}`}>
+            <AnimatePresence>
+              {sessionData?.questions?.map((data, index) => {
+                return (
+                  <motion.div 
+                    key={data._id || index}
+                    initial={{opacity: 0, y: -20 }}
+                    animate={{opacity: 1, y: 0 }}
+                    exit={{opacity: 0, scale: 0.95 }}
+                    transition={{
+                      duration: 0.4,
+                      type: "spring",
+                      stiffness: 100,
+                      delay: index * 0.1,
+                      damping: 15,
+                    }}
+                    layout
+                    layoutId={`question-${data._id || index}`}
+                  >
+                    <>
+                      <QuestionCard 
+                        question={data?.question}
+                        answer={data?.answer}
+                        onLearnMore={() => 
+                          generateConceptExplanation(data.question)
+                        }
+                        isPinned={data?.isPinned}
+                        onTogglePin={() => toggleQuestionPinStatus(data._id)}
+                      />
+                    </>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </DashboardLayout>
   )
 }

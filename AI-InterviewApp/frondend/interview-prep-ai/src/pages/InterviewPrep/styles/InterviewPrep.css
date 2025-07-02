@@ -1,0 +1,40 @@
+.interview-section {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.interview-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    color: black;
+}
+
+.questions-wrapper {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.content-area {
+    grid-column: span 12 / span 12;
+}
+
+@media (min-width: 768px) {
+    .interview-section {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .with-drawer {
+        grid-column: span 7 / span 7;
+    }
+    .no-drawer {
+        grid-column: span 8 / span 8;
+    }
+}

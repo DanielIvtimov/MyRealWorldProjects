@@ -38,7 +38,10 @@ const CreateSessionForm = () => {
         
         try{
            const aiResponse = await axiosInstace.post(API_PATHS.AI.GENERATE_QUESTIONS, {role, experience, topicsToFocus, numberOfQuestions: 10});
-           const generatedQuestions = aiResponse.data;
+           const generatedQuestions = aiResponse.data.map(q => ({
+            question: q.questions,
+            answer: q.answer,
+           }));
            const response = await axiosInstace.post(API_PATHS.SESSION.CREATE, {...formData, questions: generatedQuestions});
            if(response.data?.session?._id){
             navigate(`/interview-prep/${response.data?.session?._id}`);
