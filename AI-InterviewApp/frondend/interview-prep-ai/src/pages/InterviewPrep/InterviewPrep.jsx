@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'  
 import moment from 'moment'
 import { AnimatePresence, motion } from "framer-motion";
-import { LuCircle, LuListCollapse } from 'react-icons/lu';  
+import { LuCircle, LuCircleAlert, LuListCollapse } from 'react-icons/lu';  
 import SpinnerLoader from '../../components/Loader/SpinnerLoader';
 import { toast } from "react-hot-toast";
 import DashboardLayout from '../../components/layouts/DashboardLayout';
@@ -11,6 +11,7 @@ import axiosInstace from '../../utils/axiosInstace';
 import { API_PATHS } from '../../utils/apiPaths';
 import "./styles/InterviewPrep.css"
 import QuestionCard from '../../components/Cards/QuestionCard';
+import AIResponsePreview from './components/AIResponsePreview';
 
 const InterviewPrep = () => {
 
@@ -29,7 +30,10 @@ const InterviewPrep = () => {
     try{
       const response = await axiosInstace.get(API_PATHS.SESSION.GET_ONE(sessionId));
       if(response.data && response.data.session){
-        setSessionData(response.data.session);
+        const sortedQuestions = response.data.session.questions?.slice().sort((a, b) => {
+          return (b.isPinned === true) - (a.isPinned === true);
+        }) || [];
+        setSessionData({...response.data.session, questions: sortedQuestions});
       }
     }catch(error){
       console.error("Error:", error);
@@ -38,7 +42,17 @@ const InterviewPrep = () => {
 
   const generateConceptExplanation = async (question) => {}
 
-  const toggleQuestionPinStatus = async (questionId) => {}
+  const toggleQuestionPinStatus = async (questionId) => {
+    try{
+      const response = await axiosInstace.post(API_PATHS.QUESTION.PIN(questionId));
+      console.log(response);
+      if(response.data && response.data.question){
+        fetchSessionDetailedById();
+      }
+    }catch(error){
+      console.error("Error", error);
+    }
+  }
 
   const uploadMoreQuestions = async () => {};
 
