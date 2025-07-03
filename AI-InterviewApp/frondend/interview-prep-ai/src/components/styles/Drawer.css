@@ -1,0 +1,79 @@
+.drawer-container {
+    position: fixed;
+    top: 95px;
+    right: 0;
+    z-index: 40;
+    height: calc(100vh - 64px);
+    padding: 16px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    width: 100%;
+    box-shadow: 0 25px 50px -12px rgba(14, 116, 144, 0.1);
+    border-right: 1px solid #1f2937;
+    transition-property: transform;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.drawer-title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.drawer-close-button {
+    color: #9ca3af;
+    background-color: transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 20px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition-property: background-color, color;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer-close-button:hover {
+    background-color: #e5e7eb;
+    color: #111827;
+    cursor: pointer;
+}
+
+.drawer-close-icon {
+    font-size: 18px;
+    line-height: 28px;
+}
+
+.drawer-body {
+    font-size: 14px;
+    line-height: 20px;
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-bottom: 24px;
+}
+
+@media (min-width: 768px){
+    .drawer-container{
+        width: 40vw;
+    }
+    .drawer-closed{
+        transform: translateX(100%);
+    }
+    .drawer-open{
+        transform: translateX((0));
+    }
+}

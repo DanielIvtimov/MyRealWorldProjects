@@ -26,6 +26,19 @@
     grid-column: span 12 / span 12;
 }
 
+.drawer-error-message {
+    display: flex;
+    gap: 8px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #d97706;
+    font-weight: 500;
+}
+
+.drawer-error-icon {
+    margin-top: 4px;
+}
+
 @media (min-width: 768px) {
     .interview-section {
         padding-left: 0;

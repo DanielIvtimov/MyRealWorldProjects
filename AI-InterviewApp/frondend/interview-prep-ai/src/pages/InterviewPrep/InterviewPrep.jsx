@@ -12,6 +12,8 @@ import { API_PATHS } from '../../utils/apiPaths';
 import "./styles/InterviewPrep.css"
 import QuestionCard from '../../components/Cards/QuestionCard';
 import AIResponsePreview from './components/AIResponsePreview';
+import Drawer from '../../components/Drawer';
+import SkeletonLoader from '../../components/Loader/SkeletonLoader';
 
 const InterviewPrep = () => {
 
@@ -40,7 +42,25 @@ const InterviewPrep = () => {
     }
   }
 
-  const generateConceptExplanation = async (question) => {}
+  const generateConceptExplanation = async (question) => {
+    try{
+      setErrorMsg("");
+      setExplanation(null);
+      setIsLoading(true);
+      setOpenLeanMoreDrawer(true);
+      const response = await axiosInstace.post(API_PATHS.AI.GENERATE_EXPLANATION, {question});
+      if(response.data){
+        setExplanation(response.data);
+      }
+
+    }catch(error){
+      setExplanation(null);
+      setErrorMsg("Failed to generate explanation, Try again later");
+      console.error("Error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const toggleQuestionPinStatus = async (questionId) => {
     try{
@@ -111,6 +131,23 @@ const InterviewPrep = () => {
               })}
             </AnimatePresence>
           </div>
+        </div>
+        <div>
+          <Drawer
+            isOpen={openLeanMoreDrawer}
+            onClose={() => setOpenLeanMoreDrawer(false)}
+            title={!isLoading && explanation?.title}
+          >
+            {errorMsg && (
+              <p className="drawer-error-message">
+                <LuCircleAlert className="drawer-error-icon" /> {errorMsg}
+              </p>
+            )}
+            {isLoading && <SkeletonLoader />}
+            {!isLoading && explanation && (
+              <AIResponsePreview content={explanation?.explanation} />
+            )}
+          </Drawer>
         </div>
       </div>
     </DashboardLayout>
