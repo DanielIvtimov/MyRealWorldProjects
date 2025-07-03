@@ -1,0 +1,483 @@
+{
+	"info": {
+		"_postman_id": "52a342d7-4eb9-464c-b0a4-37b527f226a2",
+		"name": "Interview Prep AI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33509805"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Don Carlo\",\r\n    \"profileImageUrl\": \"http://localhost:8000/uploads/1749557258451-profile-10.png\",\r\n    \"email\": \"doncarlo@gmail.com\",\r\n    \"password\": \"doncarlo123\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"doncarlo@gmail.com\",\r\n    \"password\": \"doncarlo123\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc0OTU1NzMwNSwiZXhwIjoxNzUwMTYyMTA1fQ.nOE92H97pKjgJh6NYUP2bCAOWsaA8EJaBhxPhqu8yiY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Photo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MzhkNDQ1Mjg0NDNmMzE2YmY5ZTY0OCIsImlhdCI6MTc0OTU1NDcyNCwiZXhwIjoxNzUwMTU5NTI0fQ.9MZovvQL4tta0aWi14oXn5dl7F1QPTdCtz29zjvLKQg",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/E:/Pesni/02 Coding/13 MyRealWolrdProjects/MyRealWorldProjects/AI-InterviewApp/frondend/interview-prep-ai/src/assets/temp-imgs/profile-10.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/upload-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"upload-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Photo that is uploaded",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/uploads/1749557047445-profile-1.png",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"uploads",
+								"1749557047445-profile-1.png"
+							]
+						},
+						"description": "See photo that is uploaded"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "Create Session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc0OTgyMjQyOCwiZXhwIjoxNzUwNDI3MjI4fQ.ujaHcrV1UUvJuDVu4gn0It01cIS1Y20-FakbC7drz_0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\": \"Frontend Developer\",\r\n    \"experience\": 2,\r\n    \"description\": \"Preparing for frontend dev roles\",\r\n    \"topicsToFocus\": \"React, JavaScript, HTML, CSS\",\r\n    \"questions\": [\r\n        {\r\n            \"question\": \"What is useState in React\",\r\n            \"answer\": \"useState is a hook that lets you manage state inside functional components...\"\r\n        },\r\n        {\r\n            \"question\": \"Explain Virtual DOM in React\",\r\n            \"answer\": \"Virtual DOM is a lightweight copy of the real DOM...\"\r\n        }\r\n    ]\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/sessions/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"sessions",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Session",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc0OTgxOTIzNSwiZXhwIjoxNzUwNDI0MDM1fQ.bv2z9ejqMG5oy9hk1iWQj60JP_dKL2dtmjClz8rcMFE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/sessions/my-sessions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"sessions",
+								"my-sessions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Session",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc1MDA4NDI0MSwiZXhwIjoxNzUwNjg5MDQxfQ.RA8q-m3Q8Y8e19HwtNVbYUlVFRBtk3ht9JNDjAM-3Jo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/sessions/68502ab2bce6f929cbfa70c5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"sessions",
+								"68502ab2bce6f929cbfa70c5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Session",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc0OTgyMjQyOCwiZXhwIjoxNzUwNDI3MjI4fQ.ujaHcrV1UUvJuDVu4gn0It01cIS1Y20-FakbC7drz_0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/sessions/684c2cb2cb94b592b8dadba9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"sessions",
+								"684c2cb2cb94b592b8dadba9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add More Questions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc1MDA4NDI0MSwiZXhwIjoxNzUwNjg5MDQxfQ.RA8q-m3Q8Y8e19HwtNVbYUlVFRBtk3ht9JNDjAM-3Jo",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sessionId\": \"68502ab2bce6f929cbfa70c5\",\r\n    \"questions\": [\r\n        {\r\n            \"question\": \"Explain useMemo Hook?\",\r\n            \"answer\": \"useMemo is used to memorize expensive calculations and avoid recalculations on every render...\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/questions/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pin Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc1MDA4NTE4NywiZXhwIjoxNzUwNjg5OTg3fQ.USW5Xku_OrJ5W3Wek0JGsKNOt-xc_fzZWKpXg9jA01g",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/questions/68502bb90f310e2c644c5f14/pin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"68502bb90f310e2c644c5f14",
+								"pin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Notes for Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc1MDA4NTE4NywiZXhwIjoxNzUwNjg5OTg3fQ.USW5Xku_OrJ5W3Wek0JGsKNOt-xc_fzZWKpXg9jA01g",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"note\": \"Important question to review before interveiws.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/questions/68502bb90f310e2c644c5f14/note",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"68502bb90f310e2c644c5f14",
+								"note"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GenerateQuestions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc1MDE2MjIyOCwiZXhwIjoxNzUwNzY3MDI4fQ.D95AubBrqn3H42QhyGnyyZhsw4cYptTxM3vdG6bkUS8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"role\": \"Frontend Developer\",\r\n    \"experience\": \"2\",\r\n    \"topicsToFocus\": \"React, JavaScript, HTML, CSS\",\r\n    \"numberOfQuestions\": 5\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/ai/generate-questions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"ai",
+						"generate-questions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Explanation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NDgyMDM5Y2QzMGEwYmVmNzkxOGE4MCIsImlhdCI6MTc1MDE2MjIyOCwiZXhwIjoxNzUwNzY3MDI4fQ.D95AubBrqn3H42QhyGnyyZhsw4cYptTxM3vdG6bkUS8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\": \"Explain the difference between 'state' and 'props' in React. When would you use one over the other?\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/ai/generate-explanation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"ai",
+						"generate-explanation"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
