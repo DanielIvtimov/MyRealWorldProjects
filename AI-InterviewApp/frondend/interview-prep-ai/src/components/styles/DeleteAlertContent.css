@@ -1,0 +1,41 @@
+.delete-alert-container {
+    padding: 20px;
+}
+
+.delete-alert-message {
+    font-size: 14px;
+}
+
+.delete-alert-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}   
+
+.delete-alert-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding-left: 28px;
+    padding-right: 28px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    cursor: pointer;
+    background: linear-gradient(to right, #FF9324, #e99a4b);
+    transition-property: background-color, color, box-shadow;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.delete-alert-button:hover {
+    background-color: #000000;
+    color: #ffffff;
+    box-shadow: 0 25px 50px -12px rgba(251, 191, 36, 0.5);
+}

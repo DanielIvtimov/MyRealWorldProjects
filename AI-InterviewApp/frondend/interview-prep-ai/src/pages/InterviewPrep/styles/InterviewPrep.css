@@ -39,6 +39,37 @@
     margin-top: 4px;
 }
 
+.load-more-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.load-more-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #ffffff;
+    background-color: #000000;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-right: 4px;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+}
+
+.load-more-icon {
+    font-size: 18px;
+    line-height: 20px;
+}
+
 @media (min-width: 768px) {
     .interview-section {
         padding-left: 0;

@@ -57,6 +57,10 @@
     margin-right: 8px;
 }
 
+.dashboard-delete-wrapper {
+    max-width: 130vw;
+}
+
 @media (min-width: 768px){
     .dashboard-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
