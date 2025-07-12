@@ -41,5 +41,15 @@ export class UserController{
             return response.status(400).json({error: true, message: error.message});
         }
     }
+
+    async getUserDetails(request, response){
+        try{
+           const userId = request.user.id;
+           const user = await this.userModel.getUserDetails(userId);
+           return response.status(200).json({ user }); 
+        }catch(error){
+            return response.status(401).json({error: true, message: error.message || "Unauthorized"});
+        }
+    }
 }
 

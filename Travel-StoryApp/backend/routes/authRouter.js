@@ -1,5 +1,6 @@
-import express, { request } from "express";
+import express, { request, response } from "express";
 import { UserController } from "../controllers/authController.js";
+import authenticateToken from "../utilities.js";
 
 const userRoutes = express.Router();
 
@@ -13,4 +14,8 @@ userRoutes.post("/login-account", async (request, response) => {
     await userController.loginUser(request, response);
 })
 
-export default userRoutes;
+userRoutes.get("/get-user", authenticateToken, async (request, response) => {
+    await userController.getUserDetails(request, response);
+})
+
+export default userRoutes;  

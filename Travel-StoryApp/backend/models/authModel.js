@@ -1,6 +1,7 @@
 import { userMongoSchema } from "../schemas/user_schemas.js";
 import bcrypt from "bcrypt"
 import usersValidation from "../services/validations/users_validation.js";
+import loginValidation from "../services/validations/users_login_validations.js"
 import generateToken from "../services/authServiceTokens/authService.js";
 
 export class User{
@@ -25,7 +26,7 @@ export class User{
     }
 
     async loginUser({email, password}){
-        const { error, value } = usersValidation.validate({ email, password });
+        const { error, value } = loginValidation.validate({email, password});
         if(error){
             throw new Error(error.details[0].message);
         }
@@ -43,5 +44,13 @@ export class User{
             email: user.email,
             accessToken,
         }
+    }
+
+    async getUserDetails(userId){
+        const user = await userMongoSchema.findOne({_id: userId});
+        if(!user){
+            throw new Error("User not found");
+        }
+        return user;
     }
 }
