@@ -7,6 +7,7 @@ import travelStoryRoutes from "./routes/travelStoryRouter.js";
 import upload from "./multer.js";
 import { fileURLToPath } from "url";
 import path from "path";
+import fs from "fs";
 
 dotenv.config();
 
@@ -36,6 +37,26 @@ app.post("/image-upload", upload.single("image"), async(request, response) => {
        response.status(201).json({ imageUrl });
     }catch(error){
      response.status(500).json({ error: true, message: error.message});   
+    }
+})
+
+// Delete an image from uploads folder
+app.delete("/delete-image", async (request, response) => {
+    const { imageUrl } = request.body;
+    if(!imageUrl){
+        return response.status(400).json({error: true, message: "imageUrl parametar is required"});
+    }
+    try{
+        const filename = path.basename(imageUrl);
+        const filePath = path.join(__dirname, "uploads", filename);
+        if(fs.existsSync(filePath)){
+            fs.unlinkSync(filePath);
+            response.status(200).json({message: "Image deleted successfully"});
+        } else {
+            response.status(200).json({ error: true, message: "Image not found"});
+        }
+    }catch(error){
+        response.status(500).json({error: true, message: error.message});
     }
 })
 

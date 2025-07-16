@@ -25,4 +25,30 @@ export class TravelStoryController {
             return response.status(500).json({error: true, message: error.message})   
         }
     }
+
+    async editTravelStory(request, response){
+        const { id } = request.params;
+        const userId = request.user.id;
+        try{
+            const updatedStory = await this.travelStoryModel.editTravelStory(id, userId, request.body);
+            return response.status(200).json({
+                error: false,
+                story: updatedStory,
+                message: "Updated Successfully",
+            });
+        }catch(error){
+            return response.status(400).json({error: true, message: error.message });
+        }
+    }
+
+    async deleteTravelStory(reqeust, response){
+        const { id } = reqeust.params;
+        const userId = reqeust.user.id;
+        try{
+           await this.travelStoryModel.deleteTravelStory(id, userId);
+           return response.status(200).json({error: false, message: "Travel story deleted successfully"});
+        }catch(error){
+          return response.status(400).json({error: true, message: error.message});   
+        }
+    }
 }

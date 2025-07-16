@@ -12,6 +12,14 @@ travelStoryRoutes.post("/add-travel-story", authenticateToken, async (request, r
 
 travelStoryRoutes.get("/get-all-stories", authenticateToken, async (request, response) => {
     await travelStoryController.getAllStories(request, response);
-}) 
+})
+
+travelStoryRoutes.post("/edit-story/:id", authenticateToken, async (request, response) => {
+    await travelStoryController.editTravelStory(request, response);
+})
+
+travelStoryRoutes.delete("/delete-story/:id", authenticateToken, async (request, response) => {
+    await travelStoryController.deleteTravelStory(request, response);
+})
 
 export default travelStoryRoutes;
