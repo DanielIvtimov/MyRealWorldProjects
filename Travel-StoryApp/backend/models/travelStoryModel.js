@@ -70,4 +70,39 @@ export class TravelStory{
         });
         return true;
     }
+
+    async updateIsFavourite(id, userId, isFavourite){
+        const travelStory = await travelStoryMongoSchema.findOne({_id: id, userId});
+        if(!travelStory){
+            throw new Error("Travel story not found");
+        }
+        travelStory.isFavourite = isFavourite;
+        await travelStory.save();
+        return travelStory;
+    }
+
+    async searchTravelStory(userId, query){
+        if(!query){
+            throw new Error("Query is required");
+        }
+        const searchResults = await travelStoryMongoSchema.find({
+            userId: userId,
+            $or: [
+            { title: { $regex: query, $options: "i" } },
+            { story: { $regex: query, $options: "i" } },
+            { visitedLocation: { $regex: query, $options: "i" } },
+            ],
+        }).sort({ isFavourite: -1 });
+        return searchResults;
+    }
+
+    async travelStoryFilter(userId, startDate, endDate){
+        const start = new Date(parseInt(startDate));
+        const end = new Date(parseInt(endDate));
+        const filteredStories = await travelStoryMongoSchema.find({
+            userId,
+            visitedDate: { $gte: start, $lte: end },
+        }).sort({ isFavourite: -1 });
+        return filteredStories;
+    }
 }

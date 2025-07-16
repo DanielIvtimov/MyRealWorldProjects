@@ -51,4 +51,38 @@ export class TravelStoryController {
           return response.status(400).json({error: true, message: error.message});   
         }
     }
+
+    async updateIsFavourite(request, response){
+        const { id } = request.params;
+        const { isFavourite } = request.body;
+        const userId = request.user.id;
+        try{
+           const story = await this.travelStoryModel.updateIsFavourite(id, userId, isFavourite);
+           return response.status(200).json({ story, message: "Update Successful"}); 
+        }catch(error){
+            return response.status(400).json({ error: true, message: error.message});
+        } 
+    }
+
+    async searchTravelStory(request, response){
+        const { query } = request.query;
+        const userId = request.user.id;
+        try{
+           const searchResults = await this.travelStoryModel.searchTravelStory(userId, query);
+           return response.status(200).json({ stories: searchResults }); 
+        }catch(error){
+            return response.status(400).json({ error: true, message: error.message});
+        }
+    }
+
+    async travelStoryFilter(request, response){
+        const { startDate, endDate } = request.query;
+        const userId = request.user.id;
+        try{
+           const stories = await this.travelStoryModel.travelStoryFilter(userId, startDate, endDate);
+           return response.status(200).json({ stories });
+        }catch(error){
+            return response.status(400).json({ error: true, message: error.message});
+        }
+    }
 }
