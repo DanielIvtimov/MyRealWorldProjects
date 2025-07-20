@@ -1,0 +1,21 @@
+.logo-img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+.navbar-container {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    filter: drop-shadow(0 3px 1px rgba(0,0,0,0.05));
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-sizing: border-box;
+}
