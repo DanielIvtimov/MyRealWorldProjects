@@ -1,0 +1,109 @@
+.travel-story-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+    position: relative;
+    cursor: pointer;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+.travel-story-card:hover {
+    box-shadow: 0 4px 14px rgba(100, 116, 139, 0.15);
+}
+
+.travel-story-image {
+    width: 100%;
+    height: 224px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.travel-story-content {
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.travel-story-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.travel-story-meta-spacer {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+}
+
+.travel-story-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.travel-story-date {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.travel-story-excerpt {
+    font-size: 12px;
+    color: #4b5563;
+    margin-top: 8px;
+}
+
+.travel-story-location-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #0891b2;
+    background-color: rgba(167, 244, 243, 0.4);
+    border-radius: 4px;
+    margin-top: 4px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+}
+
+.travel-story-location-icon {
+    font-size: 14px;
+}
+
+.travel-story-favorite-icon {
+    font-size: 22px;
+    color: #f8fafd;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.travel-story-favorite-icon:hover {
+    color: #ef4444;
+}
+
+.travel-story-favorite-icon.active {
+    color: #ef4444;
+}
+
+.travel-story-favorite-button {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.travel-story-favorite-button:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}

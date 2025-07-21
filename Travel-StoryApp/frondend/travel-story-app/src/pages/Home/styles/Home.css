@@ -1,0 +1,32 @@
+.home-container {
+    max-width: 1280px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+}
+
+.home-content-row {
+    display: flex;
+    gap: 28px;
+}
+
+.home-main-panel {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+}
+
+.home-side-panel {
+    width: 320px;
+    box-sizing: border-box;
+}
+
+.travel-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    box-sizing: border-box;
+}
