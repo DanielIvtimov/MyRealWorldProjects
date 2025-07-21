@@ -1,0 +1,86 @@
+.add-edit-story-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.add-edit-story-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #334155;
+    margin: 0;
+}
+
+.add-edit-story-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(236, 254, 255, 0.5);
+    padding: 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    box-sizing: border-box;
+}
+
+.add-edit-story-submit-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 18px;
+    font-weight: 500;
+    background-color: #ecfeff;
+    color: #05B6D3;
+    border: 1px solid #05B6D3;
+    border-radius: 4px;
+    padding: 3px 12px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-edit-story-submit-btn:hover {
+    background-color: #05B6D3;
+    color: white;
+}
+
+.add-edit-story-submit-icon {
+    font-size: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.add-edit-story-delete-btn {
+    background-color: #fff1f2;
+    color: #ef4444;
+    border: 1px solid #ffe4e6;
+    box-shadow: none;
+    border-radius: 4px;
+}
+
+.add-edit-story-delete-btn:hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+.add-edit-story-close-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 18px;
+    font-weight: 500;
+    background-color: #ecfeff;
+    color: #94a3b8;
+    border: 1px solid #05B6D3;
+    padding: 3px 8px;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.add-edit-story-close-icon {
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}

@@ -30,3 +30,50 @@
     gap: 16px;
     box-sizing: border-box;
 }
+
+.home-edit-story-button {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: none;
+    background-color: #05B6D3;
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.home-edit-story-button:hover {
+    background-color: #22d3ee;
+}
+
+.home-edit-story-icon {
+    font-size: 35px;
+    color: white;
+    display: inline-block;
+}
+
+.modal-container {
+    width: 80vw;
+    height: 40vw;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 56px;
+    padding: 20px;
+    overflow-y: scroll;
+    z-index: 50;
+    position: relative;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px){
+    .modal-container {
+        width: 40%;
+    }
+}

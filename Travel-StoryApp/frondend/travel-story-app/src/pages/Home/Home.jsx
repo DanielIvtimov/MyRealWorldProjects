@@ -4,11 +4,21 @@ import { useNavigate } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstace.js"
 import "./styles/Home.css"
 import TravelStoryCard from '../../components/Cards/TravelStoryCard.jsx';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { MdAdd } from "react-icons/md";
+import Modal from "react-modal"
+import AddEditTravelStory from './AddEditTravelStory.jsx';
 
 const Home = () => {
 
   const [userInfo, setUserInfo] = useState(null);
   const [allStories, setAllStories] = useState([]);
+  const [openAddEditModal, setOpenAddEditModal] = useState({
+    isShown: false,
+    type: "add",
+    data: null,
+  })
 
   const navigate = useNavigate()
 
@@ -41,7 +51,20 @@ const Home = () => {
 
   const handleViewStory = (data) => {}
 
-  const updateIsFavourite = async (storyData) => {}
+  const updateIsFavourite = async (storyData) => {
+    const storyId = storyData._id;
+    try {
+      const response = await axiosInstace.put("/api/travelStory/update-is-favourite/" + storyId, {
+        isFavourite: !storyData.isFavourite,
+      });
+      if(response.data && response.data.story){
+        toast.success("Story Updated Successfully")
+        getAllTravelStories();
+      }
+    }catch(error){
+      console.log("An unexpected error occurred. Please try again");
+    }
+  }
 
   useEffect(() => {
     getUserInfo();
@@ -83,6 +106,39 @@ const Home = () => {
           <div className="home-side-panel"></div>
         </div>
       </div>
+          
+      <Modal
+        isOpen={openAddEditModal.isShown}
+        onRequestClose={() => {}}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2",
+            zIndex: 999,
+          },
+        }}
+        appElement={document.getElementById("root")}
+        className="modal-container"
+      >
+        <AddEditTravelStory 
+          type={openAddEditModal.type}
+          storyInfo={openAddEditModal.data}
+          onClose={() => {
+            setOpenAddEditModal({ isShown: false, type: "add", data: null})
+          }}
+          getAllTravelStories={getAllTravelStories}
+        /> 
+        
+      </Modal>
+
+      <button
+        className="home-edit-story-button" 
+        onClick={() => {
+          setOpenAddEditModal({ isShown: true, type: "add", data: null});
+        }}
+      >
+        <MdAdd className="home-edit-story-icon" />
+      </button>
+      <ToastContainer />
     </>
   )
 }
