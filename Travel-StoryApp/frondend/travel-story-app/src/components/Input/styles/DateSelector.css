@@ -1,0 +1,61 @@
+.date-selector-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0ea5e9;
+    background-color: rgba(224, 242, 254, 0.4);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.date-selector-btn:hover {
+    background-color: rgba(224, 242, 254, 0.7);
+}
+
+.calendar-icon {
+    font-size: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.date-selector-close-icon {
+    font-size: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #0284c7;
+}
+
+.date-picker-container {
+    overflow-y: scroll;
+    padding: 20px;
+    background-color: rgba(240, 249, 255, 0.8);
+    border-radius: 8px;
+    position: relative;
+    padding-top: 36px;
+    box-sizing: border-box;
+}
+
+.date-picker-close-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0f2fe;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.date-picker-close-btn:hover {
+    background-color: #e0f2fe;
+}
