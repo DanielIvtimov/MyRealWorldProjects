@@ -119,4 +119,40 @@
     margin-bottom: 12px;
 }
 
+.story-extra-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    box-sizing: border-box;
+}
 
+.story-textarea {
+    font-size: 14px;
+    color: #0f172a;
+    outline: none;
+    background-color: #f8fafc;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.story-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.vertical-gap {
+    padding-top: 12px;
+    box-sizing: border-box;
+}
+
+.story-help-text {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: normal;
+    display: block;
+}
