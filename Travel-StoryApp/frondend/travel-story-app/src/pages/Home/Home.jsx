@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { MdAdd } from "react-icons/md";
 import Modal from "react-modal"
 import AddEditTravelStory from './AddEditTravelStory.jsx';
+import ViewTravelStory from './ViewTravelStory.jsx';
 
 const Home = () => {
 
@@ -19,6 +20,10 @@ const Home = () => {
     type: "add",
     data: null,
   })
+  const [openViewModal, setOpenViewModal] = useState({
+    isShown: false,
+    data: null,
+  });
 
   const navigate = useNavigate()
 
@@ -49,7 +54,9 @@ const Home = () => {
 
   const handleEdit = (data) => {}
 
-  const handleViewStory = (data) => {}
+  const handleViewStory = (data) => {
+    setOpenViewModal({ isShown: true, data });
+  }
 
   const updateIsFavourite = async (storyData) => {
     const storyId = storyData._id;
@@ -90,7 +97,6 @@ const Home = () => {
                     date={item.visitedDate}
                     visitedLocation={item.visitedLocation}
                     isFavourite={item.isFavourite}
-                    onEdit={() => handleEdit(item)}
                     onClick={() => handleViewStory(item)}
                     onFavouriteClick = {() => updateIsFavourite(item)}
                     />  
@@ -127,6 +133,27 @@ const Home = () => {
           }}
           getAllTravelStories={getAllTravelStories}
         /> 
+        
+      </Modal>
+
+      <Modal
+        isOpen={openViewModal.isShown}
+        onRequestClose={() => {}}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2",
+            zIndex: 999,
+          },
+        }}
+        appElement={document.getElementById("root")}
+        className="modal-container"
+      >
+        <ViewTravelStory
+          storyInfo={openViewModal.data || null}
+          onClose={() => {}}
+          onEditClick={() => {}}
+          onDeleteClick={() => {}}   
+        />
         
       </Modal>
 

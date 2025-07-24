@@ -1,3 +1,7 @@
+.add-edit-story-wrapper {
+    position: relative;
+}
+
 .add-edit-story-header {
     display: flex;
     align-items: center;

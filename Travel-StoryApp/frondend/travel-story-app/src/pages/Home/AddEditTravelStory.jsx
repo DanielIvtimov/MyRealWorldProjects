@@ -66,7 +66,7 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
     const handleDeleteStoryImg = () => {};
 
   return (
-    <div>
+    <div className="add-edit-story-wrapper">
         <div className="add-edit-story-header">
             <h5 className="add-edit-story-title">
                 {type === "add" ? "Add Story" : "Update Story"}
