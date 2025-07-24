@@ -4,6 +4,10 @@ import { MdAdd, MdClose, MdDeleteOutline, MdUpdate } from 'react-icons/md'
 import DateSelector from '../../components/Input/DateSelector';
 import ImageSelector from '../../components/Input/ImageSelector';
 import TagInput from '../../components/Input/TagInput';
+import axiosInstance from '../../utils/axiosInstace';
+import moment from 'moment';
+import { toast } from 'react-toastify';
+import uploadImage from '../../utils/uploadImage';
 
 const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) => {
 
@@ -15,8 +19,48 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
 
     const [error, setError] = useState("");
 
+    const addNewTravelStory = async () => {
+        try{
+           let imageUrl = "";
+           if(storyImg){
+            const imgUploadResponse = await uploadImage(storyImg);
+            imageUrl = imgUploadResponse.imageUrl || "";
+           } 
+           const response = await axiosInstance.post("/api/travelStory/add-travel-story", {
+            title, 
+            story,
+            imageUrl: imageUrl || "",
+            visitedLocation,
+            visitedDate: visitedDate ? visitedDate.valueOf() : Date.now(),
+           });  
+           if(response.data && response.data.story){
+            toast.success("Story Added Successfully");
+            getAllTravelStories();
+            onClose();
+           }
+        } catch (error) {
+            
+        }
+    };
+
+    const updateTravelStory = async () => {};
+
     const handleAddOrUpdateClick = () => {
-        console.log("Input Data:", {title, storyImg, story, visitedLocation, visitedDate})
+        console.log("Input Data:", {title, storyImg, story, visitedLocation, visitedDate});
+        if(!title){
+            setError("Please enter the title");
+            return
+        }
+        if(!story){
+            setError("Please enter the story");
+            return;
+        }
+        setError("");
+        if(type === "edit"){
+            updateTravelStory();
+        } else {
+            addNewTravelStory();
+        }
     };
 
     const handleDeleteStoryImg = () => {};
@@ -48,6 +92,7 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
                         <MdClose className="add-edit-story-close-icon" /> 
                     </button>
                 </div>
+                {error && (<p className="error-message">{error}</p>)}
             </div>
         </div>
 

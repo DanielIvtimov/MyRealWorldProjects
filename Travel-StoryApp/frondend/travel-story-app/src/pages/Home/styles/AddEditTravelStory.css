@@ -156,3 +156,11 @@
     font-weight: normal;
     display: block;
 }
+
+.error-message {
+    color: #ef4444;
+    font-size: 12px;
+    padding-top: 8px;
+    text-align: right;
+    margin: 0;
+}
