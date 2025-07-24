@@ -45,7 +45,7 @@ const ViewTravelStory = ({storyInfo,  onClose, onEditClick, onDeleteClick}) => {
 
             <div className="view-story-spacer">
                 <p className="view-story-description">{storyInfo.story}</p>
-            </div>
+            </div>  
         </div>
       </div>
     </div>

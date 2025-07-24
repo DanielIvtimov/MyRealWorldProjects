@@ -52,7 +52,9 @@ const Home = () => {
     }
   }
 
-  const handleEdit = (data) => {}
+  const handleEdit = (data) => {
+    setOpenAddEditModal({ isShown: true, type: "edit", data: data});
+  }
 
   const handleViewStory = (data) => {
     setOpenViewModal({ isShown: true, data });
@@ -150,8 +152,13 @@ const Home = () => {
       >
         <ViewTravelStory
           storyInfo={openViewModal.data || null}
-          onClose={() => {}}
-          onEditClick={() => {}}
+          onClose={() => {
+            setOpenViewModal((prevDate) => ({...prevDate, isShown: false, }));
+          }}
+          onEditClick={() => {
+            setOpenViewModal((prevDate) => ({...prevDate, isShown: false }));
+            handleEdit(openViewModal.data || null);
+          }}
           onDeleteClick={() => {}}   
         />
         

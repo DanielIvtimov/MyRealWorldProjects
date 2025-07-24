@@ -11,11 +11,11 @@ import uploadImage from '../../utils/uploadImage';
 
 const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) => {
 
-    const [title, setTitle] = useState("");
-    const [storyImg, setStoryImg] = useState(null);
-    const [story, setStory] = useState("");
-    const [visitedLocation, setVisitedLocation] = useState([]);
-    const [visitedDate, setVisitedDate] = useState(null);
+    const [title, setTitle] = useState(storyInfo?.title || "");
+    const [storyImg, setStoryImg] = useState(storyInfo?.imageUrl || null);
+    const [story, setStory] = useState(storyInfo?.story || "");
+    const [visitedLocation, setVisitedLocation] = useState(storyInfo?.visitedLocation || []);
+    const [visitedDate, setVisitedDate] = useState(storyInfo?.visitedDate || null);
 
     const [error, setError] = useState("");
 
@@ -82,10 +82,6 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
                             <button className="add-edit-story-submit-btn" onClick={handleAddOrUpdateClick}>
                                 <MdUpdate className="add-edit-story-submit-icon" /> UPDATE STORY
                             </button>
-
-                            {/* <button className="add-edit-story-submit-btn add-edit-story-delete-btn" onClick={onClose}>
-                                <MdDeleteOutline className="add-edit-story-submit-icon" /> DELETE
-                            </button> */}
                         </>
                     )}
                     <button className="add-edit-story-close-btn" onClick={onClose}>
