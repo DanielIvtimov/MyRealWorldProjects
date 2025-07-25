@@ -10,11 +10,17 @@ import { MdAdd } from "react-icons/md";
 import Modal from "react-modal"
 import AddEditTravelStory from './AddEditTravelStory.jsx';
 import ViewTravelStory from './ViewTravelStory.jsx';
+import EmptyCard from '../../components/Cards/EmptyCard.jsx';
+import EmptyImg from "../../assets/temp-imgs/add-story.svg"
 
 const Home = () => {
 
   const [userInfo, setUserInfo] = useState(null);
   const [allStories, setAllStories] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState("");
+
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
     type: "add",
@@ -89,6 +95,27 @@ const Home = () => {
     }
   }
 
+  const onSearchStory = async (query) => {
+    try{
+      const response = await axiosInstace.get("/api/travelStory/search", {
+        params: {
+          query,
+        },
+      });
+      if(response.data && response.data.stories){
+        setFilterType("search");
+        setAllStories(response.data.stories);
+      }
+    }catch(error){
+      console.log("An unexpected error occured. Please try again");
+    }
+  }
+
+  const handleClearSearch = () => {
+    setFilterType("");
+    getAllTravelStories();
+  };
+
   useEffect(() => {
     getUserInfo();
     getAllTravelStories();
@@ -96,7 +123,13 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar
+        userInfo={userInfo} 
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery} 
+        onSearchNote={onSearchStory} 
+        handleClearSearch={handleClearSearch}
+       />
 
       <div className="home-container">
         <div className="home-content-row">
@@ -121,7 +154,7 @@ const Home = () => {
               </div>
             ) : (
               <>
-                Empty Card here
+                <EmptyCard imgSrc={EmptyImg} message={`Start creating your first Travel Story! Click the 'Add' button to jot down your thoughts, ideas, and memories. Let's get started! `}/>
               </>
             )}
           </div>
