@@ -75,6 +75,20 @@ const Home = () => {
     }
   }
 
+  const deleteTravelStory = async (data) => {
+    const storyId = data._id;
+    try{
+      const response = await axiosInstace.delete("/api/travelStory/delete-story/" + storyId); 
+      if(response.data && !response.data.error){
+        toast.error("Story Deleted Successfully");
+        setOpenViewModal((prevDate) => ({...prevDate, isShown: false }));
+        getAllTravelStories();
+      } 
+    }catch(error){
+      console.log("An unexpected error occured. Please try again.");
+    }
+  }
+
   useEffect(() => {
     getUserInfo();
     getAllTravelStories();
@@ -159,7 +173,9 @@ const Home = () => {
             setOpenViewModal((prevDate) => ({...prevDate, isShown: false }));
             handleEdit(openViewModal.data || null);
           }}
-          onDeleteClick={() => {}}   
+          onDeleteClick={() => {
+            deleteTravelStory(openViewModal.data || null);
+          }}   
         />
         
       </Modal>

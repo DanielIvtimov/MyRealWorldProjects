@@ -15,7 +15,7 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
     const [storyImg, setStoryImg] = useState(storyInfo?.imageUrl || null);
     const [story, setStory] = useState(storyInfo?.story || "");
     const [visitedLocation, setVisitedLocation] = useState(storyInfo?.visitedLocation || []);
-    const [visitedDate, setVisitedDate] = useState(storyInfo?.visitedDate || null);
+    const [visitedDate, setVisitedDate] = useState(storyInfo?.visitedDate ? new Date(storyInfo.visitedDate) : null);
 
     const [error, setError] = useState("");
 
@@ -43,7 +43,40 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
         }
     };
 
-    const updateTravelStory = async () => {};
+    const updateTravelStory = async () => {
+
+        const storyId = storyInfo._id;
+
+        try{
+           let imageUrl = "";
+           let postData = {
+            title, 
+            story,
+            imageUrl: storyInfo.imageUrl || "",
+            visitedLocation,
+            visitedDate: visitedDate ? visitedDate.valueOf() : Date.now(),
+           }
+
+           if(typeof storyImg === "object"){
+            const imgUploadResponse = await uploadImage(storyImg);
+            imageUrl = imgUploadResponse.imageUrl || "";
+            postData = {...postData, imageUrl: imageUrl,};
+           }
+
+           const response = await axiosInstance.post("/api/travelStory/edit-story/" + storyId, postData);  
+           if(response.data && response.data.story){
+            toast.success("Story Updated Successfully");
+            getAllTravelStories();
+            onClose();
+           }
+        }catch(error){
+            if(error.response && error.response.data && error.response.data.message){
+                setError(error.response.data.message);
+            } else {
+                setError("An unexpected error occured. Please try again. ");
+            }
+        }
+    };
 
     const handleAddOrUpdateClick = () => {
         console.log("Input Data:", {title, storyImg, story, visitedLocation, visitedDate});
@@ -63,7 +96,37 @@ const AddEditTravelStory = ({ storyInfo, type, onClose, getAllTravelStories }) =
         }
     };
 
-    const handleDeleteStoryImg = () => {};
+    const handleDeleteStoryImg = async () => {
+        try{
+           const deleteImgResponse = await axiosInstance.delete("/delete-image", {
+            params: {
+                imageUrl: storyInfo.imageUrl,
+            },
+           });
+           if(deleteImgResponse.data){
+            const storyId = storyInfo._id;
+            const postData = {
+                title,
+                story,
+                visitedLocation,
+                visitedDate: moment().valueOf(),
+                imageUrl: "",
+            };
+            const response = await axiosInstance.post("/api/travelStory/edit-story/" + storyId, postData);
+            if(response.data && response.data.story){
+                toast.success("Image deleted and story updated successfully");
+                setStoryImg(null);
+                getAllTravelStories();
+            } else {
+                toast.error("Failed to update the story after deleting image");
+            }
+           } else {
+            toast.error("Failed to delete the image on server");
+           }
+        }catch(error){
+            console.error("Error deleting image:", error);
+        }
+    };
 
   return (
     <div className="add-edit-story-wrapper">
