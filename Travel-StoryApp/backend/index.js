@@ -42,7 +42,7 @@ app.post("/image-upload", upload.single("image"), async(request, response) => {
 
 // Delete an image from uploads folder
 app.delete("/delete-image", async (request, response) => {
-    const { imageUrl } = request.body;
+    const { imageUrl } = request.query;
     if(!imageUrl){
         return response.status(400).json({error: true, message: "imageUrl parametar is required"});
     }

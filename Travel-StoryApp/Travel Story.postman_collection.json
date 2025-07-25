@@ -1,0 +1,405 @@
+{
+	"info": {
+		"_postman_id": "7215b772-31b0-4898-b4fd-6b41ac516883",
+		"name": "Travel Story",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33509805"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Create Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"Don Carlo\",\r\n    \"email\": \"doncarlo@gmail.com\",\r\n    \"password\": \"doncarlo123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/create-account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"create-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"doncarlo@gmail.com\",\r\n    \"password\": \"doncarlo123\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/auth/login-account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"login-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjQ5NjQyMSwiZXhwIjoxNzUyNzU1NjIxfQ.mYVkRQ6NVYoSJAI7xY18Ckfg40-W9Exz05GjTtHa7kY",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/auth/get-user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"get-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TravelStory",
+			"item": [
+				{
+					"name": "Add Travel Story",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjY3MjY3NywiZXhwIjoxNzUyOTMxODc3fQ.sncMHe5UdpmMel7_YoLHC-zCEtykub0YBcX4SubAuXE",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test Story 03\",\r\n    \"story\": \"Test Travel Story 03\",\r\n    \"visitedLocation\": [\"London\"],\r\n    \"imageUrl\": \"http://localhost:8000/uploads/1752674466466.png\",\r\n    \"visitedDate\": \"1724854666013\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/add-travel-story",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"add-travel-story"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Travel Stories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjY3MjY3NywiZXhwIjoxNzUyOTMxODc3fQ.sncMHe5UdpmMel7_YoLHC-zCEtykub0YBcX4SubAuXE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/get-all-stories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"get-all-stories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Travel Story",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjUxNDU3NCwiZXhwIjoxNzUyNzczNzc0fQ.cTYLqt7AEIF13TVBTRojeuFzLDQroUtnoh597CYNKJk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test Story 02\",\r\n    \"story\": \"Test Travel Story 01\",\r\n    \"visitedLocation\": [\"Kavadarci\"],\r\n    \"imageUrl\": \"https://kavadarci.gov.mk/sites/default/files/alfa/img/kavadarci/kavadarci-panorama.jpg\",\r\n    \"visitedDate\": \"1724854666013\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/edit-story/687500dbbc965b55f2b8a764",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"edit-story",
+								"687500dbbc965b55f2b8a764"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Travel Story",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjY3MjY3NywiZXhwIjoxNzUyOTMxODc3fQ.sncMHe5UdpmMel7_YoLHC-zCEtykub0YBcX4SubAuXE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/delete-story/6877b085b752cc7da38b9b79",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"delete-story",
+								"6877b085b752cc7da38b9b79"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update isFavourite",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjQ5NjQyMSwiZXhwIjoxNzUyNzU1NjIxfQ.mYVkRQ6NVYoSJAI7xY18Ckfg40-W9Exz05GjTtHa7kY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isFavourite\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/update-is-favourite/6877b0abb752cc7da38b9b7f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"update-is-favourite",
+								"6877b0abb752cc7da38b9b7f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Travel Story",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjY3MjY3NywiZXhwIjoxNzUyOTMxODc3fQ.sncMHe5UdpmMel7_YoLHC-zCEtykub0YBcX4SubAuXE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/search?query=Kavadarci",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "Kavadarci"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Travel Story Filter",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzEyMDljYjYwMTdjNjM0ZTMwMDQwYSIsImlhdCI6MTc1MjY3MjY3NywiZXhwIjoxNzUyOTMxODc3fQ.sncMHe5UdpmMel7_YoLHC-zCEtykub0YBcX4SubAuXE",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/travelStory/travel-stories/filter?startDate=1724854666013&endDate=1724854666013",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"travelStory",
+								"travel-stories",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "1724854666013"
+								},
+								{
+									"key": "endDate",
+									"value": "1724854666013"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "Upload Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/E:/Pesni/02 Coding/13 MyRealWolrdProjects/MyRealWorldProjects/Travel-StoryApp/frondend/travel-story-app/src/assets/temp-imgs/amazon-forest.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/image-upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"image-upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Upload Image",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"imageUrl\": \"http://localhost:8000/uploads/1752501961889.png\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/delete-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"delete-image"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
