@@ -6,17 +6,16 @@ const companySchema = new Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     description: {
         type: String,
     },
     website: {
         type: String,
-        required: true,
     },
     location: {
         type: String,
-        required: true,
     },
     logo: {
         type: String,
