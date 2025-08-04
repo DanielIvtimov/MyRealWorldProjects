@@ -1,5 +1,6 @@
 import express from "express";
 import { UserController } from "../controller/user.controller.js";
+import isAuthenticated from "../middlewares/isAuthenticated.js";
 
 const userRoutes = express.Router();
 
@@ -11,8 +12,11 @@ userRoutes.post("/register", async (request, response) => {
 userRoutes.post("/login", async (request, response) => {
     await userController.login(request, response);
 })
-userRoutes.post("/logout", async (request, response) => {
+userRoutes.get("/logout", async (request, response) => {
     await userController.logout(request, response);
+})
+userRoutes.post("/profile/update", isAuthenticated, async(request, response) => {
+    await userController.updateProfile(request, response);
 })
 
 export default userRoutes;

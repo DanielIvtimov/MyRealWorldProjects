@@ -1,8 +1,10 @@
 import { UserSchema } from "../schemas/user_schemas.js";
 import bcrypt from "bcryptjs";
 import userValidation from "../services/validations/user.validations.js";
-import { ValidationError, ConflictError, UnauthorizedError } from "../services/handlingErrors/appError.js";
+import { ValidationError, ConflictError, UnauthorizedError, NotFoundError } from "../services/handlingErrors/appError.js";
 import generateToken from "../services/authTokenService/auth.token.js";
+import userUpdateValidations from "../services/validations/userUpdate.validations.js";
+import userLoginValidation from "../services/validations/userLogin.validations.js";
 
 
 export class User {
@@ -28,7 +30,7 @@ export class User {
     }
 
     async login(userData){
-        const { error } = userValidation.validate(userData);
+        const { error } = userLoginValidation.validate(userData);
         if(error){
             throw new ValidationError(error.details[0].message);
         }
@@ -53,6 +55,36 @@ export class User {
             profile: user.profile
         };
         return { token, user: safeUser}
+    }
+
+    async updateProfile(userId, data){
+        const { fullname, email, phoneNumber, bio, skills } = data;  
+        const { error } = userUpdateValidations.validate(data);
+        if(error){
+            throw new ValidationError(error.details[0].message);
+        }
+        const user = await UserSchema.findById(userId);
+        if(!user){
+            throw new NotFoundError("User not found");
+        }
+        let skillsArray;
+        if(skills){
+            skillsArray = skills.split(",");
+        }
+        if(fullname) user.fullname = fullname
+        if(email) user.email = email
+        if(phoneNumber) user.phoneNumber = phoneNumber
+        if(bio) user.profile.bio = bio
+        if(skills) user.profile.skills = skillsArray;
+        await user.save();
+        return {
+            _id: user._id,
+            fullname: user.fullname,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            role: user.role,
+            profile: user.profile,
+        }
     }
 }
 

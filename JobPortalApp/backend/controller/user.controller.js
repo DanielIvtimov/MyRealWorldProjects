@@ -8,7 +8,7 @@ export class UserController {
     async register(request, response){
         try{
            const user = await this.userModel.register(request.body);
-           return response.status(201).json({ message: "User registered successfully", success: true, user}); 
+           return response.status(201).json({ message: "User registered successfully", success: true}); 
         }catch(error){
             const statusCode = error.statusCode || 400;
             return response.status(statusCode).json({message: error.message || "Registration failed", success: false});
@@ -22,7 +22,7 @@ export class UserController {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             sameSite: "strict",
-           }).json({message: `Welcome back ${user.fullname}`, success: true, user, accessToken: token});
+           }).json({message: `Welcome back ${user.fullname}`, user, accessToken: token});
         }catch(error){
             const statusCode = error.statusCode || 400;
             return response.status(statusCode).json({message: error.message, success: false});
@@ -34,6 +34,17 @@ export class UserController {
            return response.status(200).cookie("token", "", {maxAge: 0}).json({message: "Logged out Successfully", success: true}); 
         }catch(error){
          return response.status(500).json({message: "Interval Server Error", success: false,});   
+        }
+    }
+
+    async updateProfile(request, response){
+        try{
+           const userId = request.id;
+           const user = await this.userModel.updateProfile(userId, request.body);
+           return response.status(200).json({message: "Profile updated successfully", user, success: true,}); 
+        }catch(error){
+            const statusCode = error.statusCode || 500;
+            return response.status(statusCode).json({message: error.message || "Profile update failed", success: false});
         }
     }
 }
