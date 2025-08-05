@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import userRoutes from "./routes/user.routes.js";
 import companyRoutes from "./routes/company.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 
 dotenv.config({});
 
@@ -27,6 +28,7 @@ app.use(cors(corsOptions));
 
 app.use("/api/auth", userRoutes);
 app.use("/api/v1", companyRoutes);
+app.use("/api/v1", jobRoutes);
 
 const PORT = process.env.PORT || 3000;
 

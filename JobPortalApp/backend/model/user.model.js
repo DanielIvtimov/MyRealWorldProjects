@@ -1,10 +1,10 @@
 import { UserSchema } from "../schemas/user_schemas.js";
 import bcrypt from "bcryptjs";
-import userValidation from "../services/validations/user.validations.js";
+import userValidation from "../services/validations/userValidations/user.validations.js";
 import { ValidationError, ConflictError, UnauthorizedError, NotFoundError } from "../services/handlingErrors/appError.js";
 import generateToken from "../services/authTokenService/auth.token.js";
-import userUpdateValidations from "../services/validations/userUpdate.validations.js";
-import userLoginValidation from "../services/validations/userLogin.validations.js";
+import userUpdateValidations from "../services/validations/userValidations/userUpdate.validations.js";
+import userLoginValidation from "../services/validations/userValidations/userLogin.validations.js";
 
 
 export class User {
