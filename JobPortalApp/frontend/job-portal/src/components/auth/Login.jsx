@@ -1,34 +1,73 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '@radix-ui/react-label'
 import { Input } from '../ui/input'
 import { RadioGroup } from '@radix-ui/react-radio-group'
 import { Button } from '../ui/button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { USER_API_END_POINT } from '../utils/constants'
+import { toast } from 'sonner'
 
 const Login = () => {
+
+    const [input, setInput] = useState({
+        email: "",
+        password: "",
+        role: "",
+    });
+
+    const navigate = useNavigate();
+
+    const changeEventHandle = (e) => {
+        setInput({...input, [e.target.name]: e.target.value});
+    }
+
+    const changeFileHandler = (e) => {
+        setInput({...input, file: e.target.files?.[0]});
+    }
+
+    const submitHandler = async (e) => {
+            e.preventDefault();
+            try{
+               const response = await axios.post(`${USER_API_END_POINT}/login`, input, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true,
+               }); 
+               if(response.data.message){
+                navigate("/");
+                toast.success(response.data.message);
+               }
+            }catch(error){
+                console.error(error);
+                toast.error(error.response.data.message);
+            }
+        }
+ 
     return (
         <div>
             <Navbar />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
-                <form action="" className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
+                <form onSubmit={submitHandler} className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
                     <h1 className='font-bold text-xl mb-5'>Login</h1>
                     <div className='my-2'>
                         <Label>Email</Label>
-                        <Input type="email" placeholder="name@gmail.com" />
+                        <Input type="email" value={input.email} name="email" onChange={changeEventHandle} placeholder="name@gmail.com" />
                     </div>
                     <div className='my-2'>
                         <Label>Password</Label>
-                        <Input type="password" placeholder="******" />
+                        <Input type="password" value={input.password} name="password" onChange={changeEventHandle} placeholder="******" />
                     </div>
                     <div className='flex items-center justify-between'>
                         <RadioGroup className='flex items-center gap-4 my-5'>
                             <div className="flex items-center space-x-2">
-                                <Input type="radio" name="role" value="student" className="cursor-pointer" />
+                                <Input type="radio" name="role" value="student" checked={input.role === "student"} onChange={changeEventHandle} className="cursor-pointer" />
                                 <Label htmlFor="r1">Student</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <Input type="radio" name="role" value="recruiter" className="cursor-pointer" />
+                                <Input type="radio" name="role" value="recruiter" checked={input.role === "recruiter"} onChange={changeEventHandle} className="cursor-pointer" />
                                 <Label htmlFor="r2">Recruiter</Label>
                             </div>
                         </RadioGroup>
