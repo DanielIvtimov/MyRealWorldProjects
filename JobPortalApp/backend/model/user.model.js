@@ -58,7 +58,15 @@ export class User {
     }
 
     async updateProfile(userId, data){
-        const { fullname, email, phoneNumber, bio, skills } = data;  
+        let { fullname, email, phoneNumber, bio, skills } = data;  
+        if(skills && typeof skills === "string"){
+            try{
+               skills = JSON.parse(skills); 
+            }catch(error){
+                skills = skills.split(", ").map(skill => skill.trim());
+            }
+            data.skills = skills;
+        }
         const { error } = userUpdateValidations.validate(data);
         if(error){
             throw new ValidationError(error.details[0].message);
@@ -67,15 +75,11 @@ export class User {
         if(!user){
             throw new NotFoundError("User not found");
         }
-        let skillsArray;
-        if(skills){
-            skillsArray = skills.split(",");
-        }
         if(fullname) user.fullname = fullname
         if(email) user.email = email
         if(phoneNumber) user.phoneNumber = phoneNumber
         if(bio) user.profile.bio = bio
-        if(skills) user.profile.skills = skillsArray;
+        if(skills) user.profile.skills = skills;
         await user.save();
         return {
             _id: user._id,

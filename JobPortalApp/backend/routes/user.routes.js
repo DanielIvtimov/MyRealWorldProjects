@@ -16,7 +16,7 @@ userRoutes.post("/login", async (request, response) => {
 userRoutes.get("/logout", async (request, response) => {
     await userController.logout(request, response);
 })
-userRoutes.post("/profile/update", isAuthenticated, async(request, response) => {
+userRoutes.post("/profile/update", isAuthenticated, singleUpload, async(request, response) => {
     await userController.updateProfile(request, response);
 })
 
