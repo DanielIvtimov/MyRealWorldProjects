@@ -40,7 +40,8 @@ export class UserController {
     async updateProfile(request, response){
         try{
            const userId = request.id;
-           const user = await this.userModel.updateProfile(userId, request.body);
+           const file = request.file
+           const user = await this.userModel.updateProfile(userId, request.body, file);
            return response.status(200).json({message: "Profile updated successfully", user, success: true,}); 
         }catch(error){
             const statusCode = error.statusCode || 500;

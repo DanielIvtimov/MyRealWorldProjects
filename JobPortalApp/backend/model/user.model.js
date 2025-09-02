@@ -5,6 +5,7 @@ import { ValidationError, ConflictError, UnauthorizedError, NotFoundError } from
 import generateToken from "../services/authTokenService/auth.token.js";
 import userUpdateValidations from "../services/validations/userValidations/userUpdate.validations.js";
 import userLoginValidation from "../services/validations/userValidations/userLogin.validations.js";
+import uploadFileToCloudinary from "../utils/uploadFileToCloudinary.js";
 
 
 export class User {
@@ -57,8 +58,14 @@ export class User {
         return { token, user: safeUser}
     }
 
-    async updateProfile(userId, data){
-        let { fullname, email, phoneNumber, bio, skills } = data;  
+    async updateProfile(userId, data, file){
+        let { fullname, email, phoneNumber, bio, skills } = data; 
+
+        let cloudResponse = null;
+        if(file){
+            cloudResponse = await uploadFileToCloudinary(file);
+        }
+         
         if(skills && typeof skills === "string"){
             try{
                skills = JSON.parse(skills); 
@@ -80,6 +87,12 @@ export class User {
         if(phoneNumber) user.phoneNumber = phoneNumber
         if(bio) user.profile.bio = bio
         if(skills) user.profile.skills = skills;
+
+        if(cloudResponse && file){
+            user.profile.resume = cloudResponse.secure_url;
+            user.profile.resumeOriginalName = file.originalname;
+        }
+
         await user.save();
         return {
             _id: user._id,
