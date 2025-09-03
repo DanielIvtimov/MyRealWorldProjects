@@ -9,10 +9,14 @@ import uploadFileToCloudinary from "../utils/uploadFileToCloudinary.js";
 
 
 export class User {
-    async register(userData){
+    async register(userData, file){
         const { error } = userValidation.validate(userData);
         if(error){
             throw new ValidationError(error.details[0].message);
+        }
+        let cloudResponse = null;
+        if(file){
+            cloudResponse = await uploadFileToCloudinary(file);
         }
         const existingUser = await UserSchema.findOne({email: userData.email});
         if(existingUser){
@@ -25,6 +29,11 @@ export class User {
             phoneNumber: userData.phoneNumber,
             password: hashedPassword,
             role: userData.role,
+            profile: {
+                profilePhoto: cloudResponse ? cloudResponse.secure_url : undefined,
+                // resume: cloudResponse ? cloudResponse.secure_url : undefined,
+                // resumeOriginalName: file ? file.originalname : undefined
+            }
         });
         user.password = undefined;
         return user;

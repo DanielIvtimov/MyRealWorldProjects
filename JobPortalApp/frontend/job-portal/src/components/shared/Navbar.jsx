@@ -60,17 +60,17 @@ const Navbar = () => {
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Avatar className="w-10 h-10 cursor-pointer">
-                                        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" className="rounded-full" />
+                                        <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" className="w-full h-full object-cover rounded-full" />
                                     </Avatar>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-80 p-4 rounded-md border border-gray-150 shadow-xl bg-white ">
                                     <div className="flex gap-4">
                                         <Avatar className="w-10 h-10 cursor-pointer">
-                                            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" className="rounded-full" />
+                                            <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" className="w-full h-full object-cover rounded-full" />
                                         </Avatar>
                                         <div className="space-y-2">
-                                            <h4 className="font-medium">Daniel MernStack</h4>
-                                            <p className="text-sm text-muted-foreground">Lorem ipsum dolor sit amet.</p>
+                                            <h4 className="font-medium">{user?.fullname}</h4>
+                                            <p className="text-sm text-muted-foreground">{user?.profile?.bio}</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-col my-2 text-gray-600">

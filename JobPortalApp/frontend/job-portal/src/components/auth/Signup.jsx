@@ -10,6 +10,7 @@ import { USER_API_END_POINT } from '../utils/constants'
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '../redux/authSlice'
+import { Loader2 } from 'lucide-react'
 
 const Signup = () => {
 
@@ -57,7 +58,7 @@ const Signup = () => {
                }); 
                if(response.data.success){
                 navigate("/login");
-                toast.success(response.message);
+                toast.success(response.data.message);
                }
             }catch(error){
                 console.error(error);

@@ -7,7 +7,8 @@ export class UserController {
 
     async register(request, response){
         try{
-           const user = await this.userModel.register(request.body);
+            const file = request.file
+           const user = await this.userModel.register(request.body, file);
            return response.status(201).json({ message: "User registered successfully", success: true}); 
         }catch(error){
             const statusCode = error.statusCode || 400;
