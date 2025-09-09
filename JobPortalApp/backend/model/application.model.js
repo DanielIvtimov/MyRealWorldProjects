@@ -12,7 +12,10 @@ export class Application{
         if(existingApplication){
             throw new ConflictError("You have already applied for this job");
         }
-        const job = await JobSchema.findById(jobId);
+        const job = await JobSchema.findById(jobId).populate({
+            path: "applications",
+            populate: {path: "applicant", select: "_id fullname email"}
+        });
         if(!job){
             throw new NotFoundError("Job not found");
         }

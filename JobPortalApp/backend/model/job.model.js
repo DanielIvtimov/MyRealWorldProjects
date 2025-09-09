@@ -36,7 +36,10 @@ export class Job {
   }
 
   async getJobById(jobId){
-    const job = await JobSchema.findById(jobId);
+    const job = await JobSchema.findById(jobId).populate({
+      path: "applications",
+      populate: {path: "applicant", select: "_id fullname email"}
+    })
     if(!job){
         throw new NotFoundError("Job not found.");
     }

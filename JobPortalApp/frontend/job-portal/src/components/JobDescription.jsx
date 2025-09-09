@@ -9,12 +9,17 @@ import { JOB_API_END_POINT } from './utils/constants';
 
 const JobDescription = () => {
 
-    const isApplied = true;
     const params = useParams();
     const jobId = params.id;
+
     const { singleJob } = useSelector(store => store.job);
     const { user } = useSelector(store => store.auth);
+
     const dispatch = useDispatch();
+
+    const isApplied = singleJob?.applications?.some(application => application.applicant?._id === user?._id);
+
+    console.log("FULL APPLICATIONS:", singleJob?.applications);
 
     useEffect(() => {
         const fetchSingleJob = async () => {
