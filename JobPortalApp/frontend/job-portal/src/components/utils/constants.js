@@ -1,2 +1,3 @@
 export const USER_API_END_POINT = "http://localhost:8000/api/auth";
-export const JOB_API_END_POINT = "http://localhost:8000/api/v1";
+export const JOB_API_END_POINT = "http://localhost:8000/api/v1"; 
+export const APPLICATION_API_END_POINT = "http://localhost:8000/api/v1";
