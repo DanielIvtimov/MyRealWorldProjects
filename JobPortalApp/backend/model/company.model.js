@@ -1,5 +1,6 @@
 import { CompanySchema } from "../schemas/company_schemas.js";
 import { ConflictError, NotFoundError, ValidationError } from "../services/handlingErrors/appError.js";
+import uploadFileToCloudinary from "../utils/uploadFileToCloudinary.js";
 
 export class Company {
     async registerCompany(companyName, userId){
@@ -33,9 +34,17 @@ export class Company {
         return company;
     }
 
-    async updateCompany(companyId, data){
+    async updateCompany(companyId, data, file){
         const { name, description, website, location } = data;
+        let cloudResponse = null;
+        if(file){
+            cloudResponse = await uploadFileToCloudinary(file);
+        }
         const updateData = { name, description, website, location};
+        if(cloudResponse && file){
+            updateData.logo = cloudResponse.secure_url;
+            updateData.logoOriginalName = file.originalname;
+        }
         const company = await CompanySchema.findByIdAndUpdate(companyId, updateData, {new: true});
         if(!company){
             throw new NotFoundError("Company not found");

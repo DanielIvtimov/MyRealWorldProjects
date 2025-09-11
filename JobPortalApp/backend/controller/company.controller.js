@@ -41,8 +41,9 @@ export class CompanyController {
 
     async updateCompany(request, response){
         try{
+            const file = request.file;
            const companyId = request.params.id;
-           const company = await this.companyModel.updateCompany(companyId, request.body);
+           const company = await this.companyModel.updateCompany(companyId, request.body, file);
            return response.status(200).json({ message: "Company information updated.", company, success: true,}); 
         }catch(error){
             const statusCode = error.statusCode || 500;

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constants";
-import { setUser } from "../redux/authSlice";
+import { setLoading, setUser } from "../redux/authSlice";
 
 const Navbar = () => {
 
@@ -18,6 +18,7 @@ const Navbar = () => {
 
     const logoutHandler = async () => {
         try{
+            setLoading(true)
             const response = await axios.get(`${USER_API_END_POINT}/logout`, {
                 withCredentials: true
             });
