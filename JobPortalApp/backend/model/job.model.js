@@ -47,7 +47,10 @@ export class Job {
   }
 
   async getAdminJobs(adminId){
-    const jobs = await JobSchema.find({ created_by: adminId });
+    const jobs = await JobSchema.find({ created_by: adminId }).populate({
+      path: "company",
+      createdAt: -1
+    })
     if(!jobs || jobs.length === 0){
         throw new NotFoundError("Job not found");
     }
