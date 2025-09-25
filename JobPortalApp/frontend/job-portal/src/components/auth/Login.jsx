@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../shared/Navbar'
 import { Label } from '@radix-ui/react-label'
 import { Input } from '../ui/input'
@@ -20,7 +20,7 @@ const Login = () => {
         role: "",
     });
 
-    const { loading } = useSelector(store => store.auth);
+    const { loading, user } = useSelector(store => store.auth);
 
     const navigate = useNavigate();
 
@@ -29,11 +29,7 @@ const Login = () => {
     const changeEventHandle = (e) => {
         setInput({...input, [e.target.name]: e.target.value});
     }
-
-    const changeFileHandler = (e) => {
-        setInput({...input, file: e.target.files?.[0]});
-    }
-
+    
     const submitHandler = async (e) => {
             e.preventDefault();
             try{
@@ -56,6 +52,12 @@ const Login = () => {
                 dispatch(setLoading(false));
             }
         }
+
+        useEffect(() => {
+            if(user){
+                navigate("/");
+            }
+        }, [])
  
     return (
         <div>
