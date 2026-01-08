@@ -9,9 +9,19 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view("");
+        $categories = Category::query();
+        
+        if(!empty($request->keyword)){
+            $categories = $categories->where('name', 'like', '%'.$request->keyword.'%')
+                                    ->orWhere('slug', 'like', '%'.$request->keyword.'%');
+        }
+        
+        $categories = $categories->latest()->paginate(10);
+        $categories->appends($request->all());
+        
+        return view("admin.category.list", compact('categories'));
     }
     public function create()
     {
