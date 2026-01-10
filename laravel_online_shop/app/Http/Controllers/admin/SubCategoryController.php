@@ -64,67 +64,67 @@ class SubCategoryController extends Controller
         }
     }
 
-    // public function edit(SubCategory $subCategory)
-    // {
-    //     $categories = Category::orderBy('name', 'ASC')->get();
-    //     return view('admin.sub_category.edit', compact('subCategory', 'categories'));
-    // }
+    public function edit(SubCategory $subCategory)
+    {
+        $categories = Category::orderBy('name', 'ASC')->get();
+        return view('admin.sub_category.edit', compact('subCategory', 'categories'));
+    }
 
-    // public function update(SubCategory $subCategory, Request $request)
-    // {
-    //     if(empty($subCategory)){
-    //         return response()->json([
-    //             'status' => false,
-    //             'notFound' => true,
-    //             'message' => "Sub Category not found",
-    //         ]);
-    //     }
+    public function update(SubCategory $subCategory, Request $request)
+    {
+        if(empty($subCategory)){
+            return response()->json([
+                'status' => false,
+                'notFound' => true,
+                'message' => "Sub Category not found",
+            ]);
+        }
 
-    //     $validator = Validator::make($request->all(), [
-    //         "name" => "required|string|max:255",
-    //         "slug" => "required|unique:sub_categories,slug,".$subCategory->id.",id",
-    //         "category" => "required|integer|exists:categories,id",
-    //         "status" => "required|integer|in:0,1",
-    //     ]);
+        $validator = Validator::make($request->all(), [
+            "name" => "required|string|max:255",
+            "slug" => "required|unique:sub_categories,slug,".$subCategory->id.",id",
+            "category" => "required|integer|exists:categories,id",
+            "status" => "required|integer|in:0,1",
+        ]);
         
-    //     if($validator->passes()){
-    //         $subCategory->name = $request->name;
-    //         $subCategory->slug = $request->slug;
-    //         $subCategory->status = $request->status ?? 1;
-    //         $subCategory->category_id = $request->category;
-    //         $subCategory->save();
+        if($validator->passes()){
+            $subCategory->name = $request->name;
+            $subCategory->slug = $request->slug;
+            $subCategory->status = $request->status ?? 1;
+            $subCategory->category_id = $request->category;
+            $subCategory->save();
 
-    //         $request->session()->flash('success', 'Sub Category has been updated successfully');
+            $request->session()->flash('success', 'Sub Category has been updated successfully');
 
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Sub Category has been updated successfully',
-    //         ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Sub Category has been updated successfully',
+            ]);
 
-    //     } else {
-    //         return response()->json([
-    //             "status" => false,
-    //             "errors" => $validator->errors(),
-    //         ]);
-    //     }
-    // }
+        } else {
+            return response()->json([
+                "status" => false,
+                "errors" => $validator->errors(),
+            ]);
+        }
+    }
 
-    // public function destroy(SubCategory $subCategory, Request $request)
-    // {
-    //     if(empty($subCategory)){
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => "Sub Category not found",
-    //         ]);
-    //     }
+    public function destroy(SubCategory $subCategory, Request $request)
+    {
+        if(empty($subCategory)){
+            return response()->json([
+                'status' => false,
+                'message' => "Sub Category not found",
+            ]);
+        }
 
-    //     $subCategory->delete();
+        $subCategory->delete();
 
-    //     $request->session()->flash('success', "Sub Category deleted successfully");
+        $request->session()->flash('success', "Sub Category deleted successfully");
 
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => "Sub Category deleted successfully",
-    //     ]);
-    // }
+        return response()->json([
+            'status' => true,
+            'message' => "Sub Category deleted successfully",
+        ]);
+    }
 }
