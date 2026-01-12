@@ -142,7 +142,7 @@ $(document).ready(function(){
 
 $("#name").keyup(function(){
     element = $(this);
-    $("button[type='submit']").prop('disabled', true);
+    $("#button[type='submit']").prop('disabled', true);
     $.ajax({
         url: "{{ route('getSlug')}}",
         type: "get",
