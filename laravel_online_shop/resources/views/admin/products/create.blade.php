@@ -60,6 +60,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" id="product-gallery">
+
+                        </div>
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h2 class="h4 mb-3">Pricing</h2>
@@ -220,42 +223,42 @@
         });
 
         // Handle track_qty checkbox change
-        $("#track_qty").change(function(){
-            if($(this).is(':checked')){
+        $("#track_qty").change(function () {
+            if ($(this).is(':checked')) {
                 $("#track_qty_hidden").val("Yes");
             } else {
                 $("#track_qty_hidden").val("No");
             }
         });
 
-        $("#productForm").submit(function(event){
+        $("#productForm").submit(function (event) {
             event.preventDefault();
-            
+
             // Ensure track_qty has correct value before submit
-            if($("#track_qty").is(':checked')){
+            if ($("#track_qty").is(':checked')) {
                 $("#track_qty_hidden").val("Yes");
             } else {
                 $("#track_qty_hidden").val("No");
             }
-            
+
             formArray = $(this).serializeArray();
             $.ajax({
                 url: "{{ route('products.store')}}",
                 type: "post",
                 data: formArray,
                 dataType: "json",
-                success: function(response){
-                    if(response['status'] == true){
-                        window.location.href = "{{ route('products.create') }}";
+                success: function (response) {
+                    if (response['status'] == true) {
+                        window.location.href = "{{ route('products.index') }}";
                     } else {
                         let errors = response['errors'];
                         let fields = ['title', 'slug', 'price', 'sku', 'track_qty', 'category', 'is_featured', 'qty'];
-                        
-                        fields.forEach(function(field) {
+
+                        fields.forEach(function (field) {
                             let fieldElement = $("#" + field);
                             let errorElement = fieldElement.siblings('p');
-                            
-                            if(errors[field]) {
+
+                            if (errors[field]) {
                                 fieldElement.addClass('is-invalid');
                                 errorElement.addClass('invalid-feedback').html(errors[field][0]);
                             } else {
@@ -265,37 +268,75 @@
                         });
                     }
                 },
-                error: function(){
+                error: function () {
                     console.log("Something went wrong");
                 }
             });
         });
 
-        $("#category").change(function(){
+        $("#category").change(function () {
             let category_id = $(this).val();
-            
+
             $("#sub_category").find('option').not(':first').remove();
 
-            if(category_id != ""){
+            if (category_id != "") {
                 $.ajax({
                     url: "{{ route('product-subcategories.index') }}",
                     type: "get",
-                    data: {category_id: category_id},
+                    data: { category_id: category_id },
                     dataType: "json",
-                    success: function(response){
-                        if(response['status'] == true){
+                    success: function (response) {
+                        if (response['status'] == true) {
                             $("#sub_category").find('option').not(':first').remove();
-                            $.each(response['subCategories'], function(key, item){
+                            $.each(response['subCategories'], function (key, item) {
                                 $("#sub_category").append(`<option value="${item.id}">${item.name}</option>`);
                             });
                         }
                     },
-                    error: function(){
+                    error: function () {
                         console.log("Something went wrong");
                     }
                 });
             }
         });
+
+        Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            // init: function () {
+            //     this.on('addedfile', function (file) {
+            //         if (this.files.length > 1) {
+            //             this.removeFile(this.files[0]);
+            //         }
+            //     });
+            // },
+            url: "{{ route('temp-images.create')}}",
+            maxFiles: 10,
+            paramName: "image",
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, success: function (file, response) {
+                if(response.status == true){
+                    let html = `<div class="col-md-3" id="image-row-${response.image_id}"><div class="card">
+                        <input type="hidden" name="image_array[]" value="${response.image_id}">
+                        <img src="${response.imagePath}" class="card-img-top" alt="" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <a href="javascript:void(0)" onClick="deleteImage(${response.image_id})" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div></div>`;
+
+                    $("#product-gallery").append(html);
+                }
+            },
+            complete: function(file){
+                this.removeFile(file);
+            },
+        });
+
+        function deleteImage(image_id){
+            $("#image-row-"+image_id).remove();
+        }
 
     </script>
 @endsection
