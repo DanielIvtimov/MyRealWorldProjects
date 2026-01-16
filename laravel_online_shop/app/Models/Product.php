@@ -25,4 +25,9 @@ class Product extends Model
         'qty',
         'status',
     ];
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
 }

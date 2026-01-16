@@ -14,9 +14,22 @@ use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $products = Product::with('productImages')->latest('id');
         
+        if(!empty($request->keyword)){
+            $products = $products->where(function($query) use ($request) {
+                $query->where('title', 'like', '%'.$request->keyword.'%')
+                      ->orWhere('sku', 'like', '%'.$request->keyword.'%');
+            });
+        }
+        
+        $products = $products->paginate(10);
+        $products->appends($request->all());
+        
+        $data['products'] = $products;
+        return view('admin.products.list', $data);
     }
     public function create()
     {
