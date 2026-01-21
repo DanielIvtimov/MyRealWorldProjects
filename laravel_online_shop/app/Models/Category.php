@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SubCategory;
 
 class Category extends Model
 {
@@ -14,7 +15,12 @@ class Category extends Model
         'slug',
         'status',
         'image',
+        'showHome',
     ];
+
+    public function sub_category(){
+        return $this->hasMany(SubCategory::class);
+    }
 }
 
 

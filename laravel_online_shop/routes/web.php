@@ -13,7 +13,7 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\ProductImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use App\Http\Controllers\FrontController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,9 +25,11 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
 Route::group(['prefix' => 'admin'], function(){
     Route::group(['middleware' => 'admin.guest'], function(){
