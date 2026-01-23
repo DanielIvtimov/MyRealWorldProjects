@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\ProductImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\ShopController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +31,7 @@ use App\Http\Controllers\FrontController;
 // });
 
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
+Route::get('/shop', [ShopController::class, 'index'])->name('front.shop');
 
 Route::group(['prefix' => 'admin'], function(){
     Route::group(['middleware' => 'admin.guest'], function(){
