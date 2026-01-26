@@ -34,12 +34,12 @@
                                                     </button>
                                                 </h2>
 
-                                                <div id="collapse-{{ $key }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $key }}"
+                                                <div id="collapse-{{ $key }}" class="accordion-collapse collapse {{$categorySelected == $category->id ? 'show' : ''}}" aria-labelledby="heading-{{ $key }}"
                                                     data-bs-parent="#accordionExample">
                                                     <div class="accordion-body">
                                                         <div class="navbar-nav">
                                                             @foreach($category->sub_category as $subCategory)
-                                                                <a href="" class="nav-item nav-link">
+                                                                <a href="{{ route('front.shop', [$category->slug, $subCategory->slug]) }}" class="nav-item nav-link {{ ($subCategorySelected == $subCategory->id) ? 'text-primary' : '' }}">
                                                                     {{ $subCategory->name }}
                                                                 </a>
                                                             @endforeach
@@ -47,7 +47,7 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <a href="#" class="nav-item nav-link px-3 py-2">
+                                                <a href="{{ route('front.shop', $category->slug) }}" class="nav-item nav-link px-3 py-2 {{ ($categorySelected == $category->id) ? 'text-primary' : '' }}">
                                                     {{ $category->name }}
                                                 </a>
                                             @endif
@@ -67,8 +67,8 @@
                             @if($brands->isNotEmpty()) 
                                 @foreach($brands as $brand)
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" name="brand[]" value="{{ $brand->id }}" id="brand-{{ $brand->id }}">
-                                        <label class="form-check-label" for="flexCheckDefault">
+                                        <input {{ in_array($brand->id, $brandsArray) ? "checked" : ""}} class="form-check-input brand-label" type="checkbox" name="brand[]" value="{{ $brand->id }}" id="brand-{{ $brand->id }}">
+                                        <label class="form-check-label" for="brand-{{ $brand->id }}">
                                             {{ $brand->name }}
                                         </label>
                                     </div>
@@ -188,3 +188,24 @@
         </div>
     </section>
 @endsection
+
+@section('customJs')
+    <script>
+        $(".brand-label").change(function(){
+            apply_filters();
+        });
+
+        function apply_filters(){
+            let brands = [];
+            $(".brand-label").each(function(){
+                if($(this).is(":checked") == true){
+                    brands.push($(this).val());
+                }
+            });
+            console.log(brands.toString());
+
+            let url = "{{ url()->current() }}";
+            window.location.href = url + '?brand=' + brands.toString();
+        }
+    </script>
+@endsection 
