@@ -84,30 +84,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    $0-$100
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    $100-$200
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    $200-$500
-                                </label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                                <label class="form-check-label" for="flexCheckChecked">
-                                    $500+
-                                </label>
-                            </div>
+                            <input type="text" class="js-range-slider" name="my_range" value=""/>
                         </div>
                     </div>
                 </div>
@@ -116,15 +93,11 @@
                         <div class="col-12 pb-1">
                             <div class="d-flex align-items-center justify-content-end mb-4">
                                 <div class="ml-2">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                                            data-bs-toggle="dropdown">Sorting</button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#">Latest</a>
-                                            <a class="dropdown-item" href="#">Price High</a>
-                                            <a class="dropdown-item" href="#">Price Low</a>
-                                        </div>
-                                    </div>
+                                    <select name="sort" id="sort" class="form-select form-select-sm">
+                                        <option value="latest" {{ (isset($sort) && $sort == "latest") ? "selected" : "" }}>Latest</option>
+                                        <option value="price-desc" {{ (isset($sort) && $sort == "price-desc") ? "selected" : ""}}>Price High</option>
+                                        <option value="price-asc" {{ (isset($sort) && $sort == "price-asc") ? "selected" : ""}}>Price Low</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -191,8 +164,36 @@
 
 @section('customJs')
     <script>
-        $(".brand-label").change(function(){
-            apply_filters();
+        var rangeSliderInstance = null;
+
+        $(document).ready(function() {
+            // Initialize Range Slider only if element exists
+            if ($(".js-range-slider").length > 0) {
+                rangeSliderInstance = $(".js-range-slider").ionRangeSlider({
+                    type: "double",
+                    min: 0,
+                    max: 1000,
+                    from: {{( $priceMin ?? 0 )}},
+                    step: 10,
+                    to: {{ ($priceMax ?? 1000) }},
+                    skin: "round",
+                    max_postfix: "+",
+                    prefix: "$",
+                    drag_interval: false,
+                    onFinish: function(data){
+                        apply_filters();
+                    }
+                });
+            }
+
+            // Brand filter change handler
+            $(".brand-label").change(function(){
+                apply_filters();
+            });
+
+            $("#sort").change(function(){
+                apply_filters();
+            });
         });
 
         function apply_filters(){
@@ -202,10 +203,31 @@
                     brands.push($(this).val());
                 }
             });
-            console.log(brands.toString());
 
             let url = "{{ url()->current() }}";
-            window.location.href = url + '?brand=' + brands.toString();
+            let params = [];
+            
+            // Add brand filter if any brands are selected
+            if (brands.length > 0) {
+                params.push('brand=' + brands.join(','));
+            }
+
+            // Get price range from slider if it exists
+            if (rangeSliderInstance && rangeSliderInstance.data("ionRangeSlider")) {
+                let slider = rangeSliderInstance.data("ionRangeSlider");
+                params.push('price_min=' + slider.result.from);
+                params.push('price_max=' + slider.result.to);
+            }
+
+            // Add sorting parameter
+            params.push('sort=' + $("#sort").val());
+
+            // Build final URL with parameters
+            if (params.length > 0) {
+                url += '?' + params.join('&');
+            }
+
+            window.location.href = url;
         }
     </script>
 @endsection 

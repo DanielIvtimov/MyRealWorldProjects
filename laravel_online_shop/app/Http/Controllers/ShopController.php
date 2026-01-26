@@ -27,27 +27,61 @@ class ShopController extends Controller
             ->where('status', 1)
             ->get();
 
-        $products = Product::where('status', 1);
+        // Build products query with eager loading to avoid N+1 problems
+        $products = Product::with('productImages')->where('status', 1);
 
+        // Filter by category if provided
         if ($categorySlug) {
             $category = Category::where('slug', $categorySlug)->firstOrFail();
             $products->where('category_id', $category->id);
             $categorySelected = $category->id;
         }
 
+        // Filter by subcategory if provided
         if ($subCategorySlug) {
             $subCategory = SubCategory::where('slug', $subCategorySlug)->firstOrFail();
             $products->where('sub_category_id', $subCategory->id);
             $subCategorySelected = $subCategory->id;
         }
 
+        // Filter by brands if provided
         if(!empty($request->get('brand'))){
-            $brandsArray = explode(',', $request->get('brand'));
-            $products = $products->whereIn('brand_id', $brandsArray);
+            $brandsArray = array_filter(explode(',', $request->get('brand')));
+            if(!empty($brandsArray)){
+                $products->whereIn('brand_id', $brandsArray);
+            }
         }
-        // $brandsArray = $request->get('brand');
 
-        $products = $products->orderBy('id', 'DESC')->get();
+        // Filter by price range if provided
+        $priceMin = $request->get('price_min');
+        $priceMax = $request->get('price_max');
+        
+        if(!empty($priceMin) || !empty($priceMax)){
+            $minPrice = !empty($priceMin) ? intval($priceMin) : 0;
+            $maxPrice = !empty($priceMax) ? intval($priceMax) : 1000000;
+            $products->whereBetween('price', [$minPrice, $maxPrice]);
+        }
+
+        // Get default price values for slider initialization
+        $priceMin = !empty($priceMin) ? intval($priceMin) : 0;
+        $priceMax = !empty($priceMax) ? intval($priceMax) : 1000;
+
+        // Apply sorting based on request parameter
+        $sort = $request->get('sort', 'latest');
+        switch($sort) {
+            case 'price-desc':
+                $products->orderBy('price', 'DESC');
+                break;
+            case 'price-asc':
+                $products->orderBy('price', 'ASC');
+                break;
+            case 'latest':
+            default:
+                $products->orderBy('id', 'DESC');
+                break;
+        }
+
+        $products = $products->get();
 
         return view('front.shop', compact(
             'categories',
@@ -56,6 +90,9 @@ class ShopController extends Controller
             'categorySelected',
             'subCategorySelected',
             'brandsArray',
+            'priceMin',
+            'priceMax',
+            'sort'
         ));
     }
 }
