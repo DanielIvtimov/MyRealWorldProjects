@@ -81,7 +81,7 @@ class ShopController extends Controller
                 break;
         }
 
-        $products = $products->get();
+        $products = $products->paginate(6);
 
         return view('front.shop', compact(
             'categories',
