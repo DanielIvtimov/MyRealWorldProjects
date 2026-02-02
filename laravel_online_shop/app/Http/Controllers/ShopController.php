@@ -106,11 +106,14 @@ class ShopController extends Controller
 
         if($product->related_products != ""){
             $productArray = explode(',', $product->related_products);
-            $relatedProducts = Product::whereIn('id', $productArray)->get();
+            $relatedProducts = Product::whereIn('id', $productArray)
+                ->with('productImages')
+                ->where('status', 1)
+                ->get();
         }
 
         $data['product'] = $product;
         $data['relatedProducts'] = $relatedProducts;
-        return view('front.layouts.product', $data);
+        return view('front.product', $data);
     }
 }

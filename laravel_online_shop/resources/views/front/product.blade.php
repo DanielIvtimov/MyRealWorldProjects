@@ -57,7 +57,7 @@
                         @endif 
                         <h2 class="price ">${{ $product->price }}</h2>
                         {!! $product->short_description !!}
-                        <a href="cart.php" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>
+                        <a href="javascript:void(0)" onClick="addToCart({{ $product->id }})" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@
                                 {!! $product->shipping_returns !!}
                             </div>
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-                                {!! $product->related_products !!}
+                                <p>No reviews yet. Be the first to review this product!</p>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             @endphp
                             <div class="card product-card">
                                 <div class="product-image position-relative">
-                                    <a href="" class="product-img">
+                                    <a href="{{ route('front.product', $relProduct->slug) }}" class="product-img">
                                         @if(!empty($productImage) && !empty($productImage->image))
                                             <img class="card-img-top"
                                                 src="{{ asset('uploads/product/small/' . $productImage->image) }}">
@@ -119,16 +119,16 @@
                                             <img class="card-img-top" src="{{ asset('admin-assets/img/default-150x150.png') }}">
                                         @endif
                                     </a>
-                                    <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                    <a class="whishlist" href="#"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        <a class="btn btn-dark" href="#">
+                                        <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $relProduct->id }})">
                                             <i class="fa fa-shopping-cart"></i> Add To Cart
                                         </a>
                                     </div>
                                 </div>
                                 <div class="card-body text-center mt-3">
-                                    <a class="h6 link" href="">{{ $relProduct->title }}</a>
+                                    <a class="h6 link" href="{{ route('front.product', $relProduct->slug) }}">{{ $relProduct->title }}</a>
                                     <div class="price mt-2">
                                         <span class="h5"><strong>${{ $relProduct->price }}</strong></span>
                                         @if($relProduct->compare_price > 0 && $relProduct->compare_price > $relProduct->price)
