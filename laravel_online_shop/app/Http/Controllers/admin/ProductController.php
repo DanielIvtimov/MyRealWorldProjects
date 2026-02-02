@@ -80,6 +80,7 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
             $product->is_featured = $request->is_featured;
+            $product->related_products = (!empty($request->related_products)) ? implode(',', $request->related_products) : null;
 
             $product->save();
 
@@ -181,6 +182,14 @@ class ProductController extends Controller
 
         $subCategories = SubCategory::where('category_id', $product->category_id)->get();
 
+        $relatedProducts = [];
+
+        // Fetch Related Products
+        if($product->related_products != ""){
+            $productArray = explode(',', $product->related_products);
+            $relatedProducts = Product::whereIn('id', $productArray)->get();
+        }
+
         $data = [];
         $categories = Category::orderBy('name', 'ASC')->get();
         $brands = Brand::orderBy('name', 'ASC')->get();
@@ -189,6 +198,7 @@ class ProductController extends Controller
         $data['product'] = $product;
         $data['subCategories'] = $subCategories;
         $data['productImages'] = $productImages;
+        $data['relatedProducts'] = $relatedProducts;
         return view('admin.products.edit', $data);
     }
     public function update($id, Request $request)
@@ -233,6 +243,7 @@ class ProductController extends Controller
             $product->barcode = $request->barcode;
             $product->track_qty = $request->track_qty;
             $product->qty = ($request->track_qty == 'Yes') ? $request->qty : null;
+            $product->related_products = (!empty($request->related_products)) ? implode(',', $request->related_products) : null;
             $product->status = $request->status;
             
             // Reset sub_category if category changed
@@ -245,7 +256,7 @@ class ProductController extends Controller
             
             $product->brand_id = $request->brand;
             $product->is_featured = $request->is_featured;
-
+            
             $product->save();
 
             
@@ -263,5 +274,24 @@ class ProductController extends Controller
                 'errors' => $validator->errors(),   
             ]);
         }
+    }
+
+    public function getProducts(Request $request)
+    {
+        $tempProducts = [];
+        if($request->term != ""){
+            $products = Product::where('title', 'like', '%'.$request->term.'%')
+                ->where('status', 1)
+                ->get();
+            if($products != null){
+                foreach($products as $product){
+                    $tempProducts[] = array('id' => $product->id, 'text' => $product->title); 
+                }
+            }
+        }
+        return response()->json([
+            'tags' => $tempProducts,
+            'status' => true,
+        ]);
     }
 }

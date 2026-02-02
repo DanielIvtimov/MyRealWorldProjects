@@ -78,7 +78,7 @@
                                     <div class="col-md-3" id="image-row-{{ $productImage->id}}">
                                         <div class="card">
                                             <input type="hidden" name="image_array[]" value="{{ $productImage->id }}">
-                                            <img src="{{ asset('uploads/product/small/'.$productImage->image)}}" class="card-img-top" alt=""
+                                            <img src="{{ asset('uploads/product/small/' . $productImage->image)}}" class="card-img-top" alt=""
                                                 style="width: 100%; height: 200px; object-fit: cover;">
                                             <div class="card-body">
                                                 <a href="javascript:void(0)" onClick="deleteImage({{ $productImage->id }})"
@@ -149,6 +149,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Related product</h2>
+                                <div class="mb-3">
+                                    <label for="related_products">Select Related Products</label>
+                                    <select name="related_products[]" id="related_products" class="related-products w-100" multiple>
+                                        @if(!empty($relatedProducts) && $relatedProducts->isNotEmpty())
+                                            @foreach($relatedProducts as $relatedProduct)
+                                                <option value="{{ $relatedProduct->id }}" selected>{{ $relatedProduct->title }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <p class="text-muted mt-2">Start typing to search for products...</p>
+                                    <p class="error"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card mb-3">
@@ -216,7 +233,7 @@
                                     <p class="error"></p>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
 
@@ -233,6 +250,32 @@
 
 @section('customJs')
     <script>
+
+        $(".related-products").select2({
+            ajax: {
+                url: "{{ route('products.getProducts')}}",
+                dataType: "json",
+                delay: 250,
+                data: function (params) {
+                    return {
+                        term: params.term || '',
+                        page: params.page || 1
+                    };
+                },
+                processResults: function(data){
+                    return {
+                        results: data.tags 
+                    }
+                },
+                cache: true
+            },
+            placeholder: 'Search for products...',
+            minimumInputLength: 3,
+            multiple: true,
+            width: '100%',
+            allowClear: true
+        });
+
         $("#title").keyup(function () {
             element = $(this);
             $("button[type='submit']").prop('disabled', true);
