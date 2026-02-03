@@ -11,11 +11,27 @@ class CartController extends Controller
 {
     public function addToCart(Request $request)
     {
+        // Validate input
+        if(empty($request->id)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Product ID is required'
+            ]);
+        }
+
         $product = Product::with('productImages')->find($request->id);
         if($product == null){
             return response()->json([
                 'status' => false,
                 'message' => 'Product not found'
+            ]);
+        }
+
+        // Check if product is active
+        if($product->status != 1){
+            return response()->json([
+                'status' => false,
+                'message' => 'Product is not available'
             ]);
         }
         
@@ -50,10 +66,12 @@ class CartController extends Controller
                 ]
             );
             $status = true;
-            $message = $product->title.' added in cart successfully';
+            $message = '<strong>'.$product->title.'</strong> added in cart successfully';
+            session()->flash('success', $message);
         } else {
             $status = false;
-            $message = $product->title.' already added in cart';
+            $message = '<strong>'.$product->title.'</strong> already added in cart';
+            session()->flash('error', $message);
         }
         
         return response()->json([
@@ -83,5 +101,113 @@ class CartController extends Controller
         $data['cartShipping'] = $shipping;
         $data['cartTotal'] = $total;
         return view('front.cart', $data);
+    }
+    public function updateCart(Request $request)
+    {
+        $rowId = $request->rowId;
+        $qty = $request->qty;
+
+        // Validate input
+        if(empty($rowId) || empty($qty)){
+            $message = '<strong>Invalid request.</strong> Please try again.';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // Get cart item
+        $itemInfo = Cart::get($rowId);
+        if(empty($itemInfo)){
+            $message = '<strong>Item not found in cart.</strong>';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // Get product from database
+        $product = Product::find($itemInfo->id);
+        if(empty($product)){
+            $message = '<strong>Product not found.</strong>';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // Validate quantity
+        $qty = (int)$qty;
+        if($qty < 1){
+            $message = '<strong>Quantity must be at least 1.</strong>';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // Check if product tracks quantity
+        if($product->track_qty == "Yes"){
+            if($qty <= $product->qty){
+                Cart::update($rowId, $qty);
+                $message = '<strong>Cart updated successfully!</strong>';
+                session()->flash('success', $message);
+                $status = true;
+            } else {
+                $message = '<strong>Requested quantity ('.$qty.') is not available.</strong> Only '.$product->qty.' available.';
+                session()->flash('error', $message);
+                $status = false;
+            }
+        } else {
+            Cart::update($rowId, $qty);
+            $message = '<strong>Cart updated successfully!</strong>';
+            session()->flash('success', $message);
+            $status = true;
+        } 
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+    public function deleteItem(Request $request)
+    {
+        $rowId = $request->rowId;
+
+        // Validate input
+        if(empty($rowId)){
+            $message = '<strong>Invalid request.</strong> Please try again.';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // Get cart item to verify it exists
+        $itemInfo = Cart::get($rowId);
+
+        if($itemInfo == null){
+            $message = '<strong>Item not found in cart.</strong>';
+            session()->flash('error', $message);
+            return response()->json([
+                'status' => false,
+                'message' => $message
+            ]);
+        }
+
+        // Remove item from cart
+        Cart::remove($rowId);
+        
+        $message = '<strong>Item deleted successfully!</strong>';
+        session()->flash('success', $message);
+        return response()->json([
+            'status' => true,
+            'message' => $message
+        ]);
     }
 }
