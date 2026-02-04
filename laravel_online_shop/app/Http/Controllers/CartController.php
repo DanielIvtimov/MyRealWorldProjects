@@ -7,6 +7,9 @@ use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Country;
+use Illuminate\Support\Facades\Validator;
+
+use App\Models\CustomerAddress;
 
 
 class CartController extends Controller
@@ -234,6 +237,54 @@ class CartController extends Controller
 
         return view('front.checkout', [
             'countries' => $countries,
+        ]);
+    }
+    public function processCheckout(Request $request)
+    {
+        // Apply Validaiton 
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255|min:3',
+            'last_name' => 'required|string|max:255|min:3',
+            'email' => 'required|email|string',
+            'country' => 'required',
+            'address' => 'required|min:5',
+            'city' => 'required',
+            'state' => 'required',
+            'zip' => 'required',
+            'mobile' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'message' => 'Please fix the errors',
+                'errors' => $validator->errors(),
+            ]);
+        } 
+
+        // Save user address
+        
+        $user = Auth::user();
+        
+        CustomerAddress::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'country_id' => $request->country,
+                'address' => $request->address,
+                'apartment' => $request->appartment ?? null,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zip' => $request->zip,
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Order placed successfully'
         ]);
     }
 }
