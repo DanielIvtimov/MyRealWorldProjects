@@ -125,7 +125,7 @@
                             </div>
                             <div class="pt-5">
                                 @if(!empty($cartContent) && $cartContent->count() > 0)
-                                    <a href="login.php" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
+                                    <a href="{{ route('front.checkout') }}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
                                 @else
                                     <a href="{{ route('front.shop') }}" class="btn-dark btn btn-block w-100">Continue Shopping</a>
                                 @endif

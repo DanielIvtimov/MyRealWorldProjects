@@ -59,6 +59,10 @@ class AuthController extends Controller
         if($validator->passes()){
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))){
                 session()->flash('success', '<strong>Login successful!</strong> Welcome back.');
+
+                // if(session()->has('url.intented')){
+                //     return redirect(session()->get('url.intented'));
+                // }
                 
                 return response()->json([
                     'status' => true,
