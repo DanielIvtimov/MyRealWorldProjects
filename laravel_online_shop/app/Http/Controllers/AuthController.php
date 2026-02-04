@@ -79,4 +79,13 @@ class AuthController extends Controller
             ]);
         }
     }
+    public function profile()
+    {
+        return view('front.account.profile');
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('front.account.login')->with('success', 'You have been logged out successfully.');
+    }
 }
