@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -97,6 +98,13 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
         Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
+
+        // Shipping Routes
+        Route::get('/shipping/create', [ShippingController::class, 'create'])->name('shipping.create');
+        Route::post('/shipping', [ShippingController::class, 'store'])->name('shipping.store');
+        Route::get('/shipping/{id}', [ShippingController::class, 'edit'])->name('shipping.edit');
+        Route::put('/shipping/{id}', [ShippingController::class, 'update'])->name('shipping.update');
+        Route::delete('/shipping/{id}', [ShippingController::class, 'destroy'])->name('shipping.delete');
         
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
