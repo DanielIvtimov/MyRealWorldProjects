@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Country;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\CustomerAddress;
+use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Country;
 use Illuminate\Support\Facades\Validator;
-
-use App\Models\CustomerAddress;
-
 
 class CartController extends Controller
 {
@@ -231,16 +231,27 @@ class CartController extends Controller
             return redirect()->route('account.login');
         }
 
+        $customerAddress = CustomerAddress::where('user_id', Auth::user()->id)->first();
+
         session()->forget('url.intented');
 
         $countries = Country::orderBy('name', 'ASC')->get();
 
         return view('front.checkout', [
             'countries' => $countries,
+            'customerAddress' => $customerAddress 
         ]);
     }
     public function processCheckout(Request $request)
     {
+        // Check if cart is empty
+        if(Cart::count() == 0){
+            return response()->json([
+                'status' => false,
+                'message' => 'Your cart is empty',
+            ]);
+        }
+
         // Apply Validaiton 
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255|min:3',
@@ -275,16 +286,82 @@ class CartController extends Controller
                 'mobile' => $request->mobile,
                 'country_id' => $request->country,
                 'address' => $request->address,
-                'apartment' => $request->appartment ?? null,
+                'apartment' => $request->apartment ?? null,
                 'city' => $request->city,
                 'state' => $request->state,
                 'zip' => $request->zip,
             ]
         );
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Order placed successfully'
+        // Store data in orders table 
+        if($request->payment_method == 'cod'){
+            $shipping = 0;
+            $discount = 0;
+            $subTotal = Cart::subtotal(2, '.', '');
+            $grandTotal = $subTotal + $shipping;
+
+            $order = new Order();
+            $order->subtotal = $subTotal;
+            $order->shipping = $shipping;
+            $order->grand_total = $grandTotal;
+            $order->user_id = $user->id;
+            $order->first_name = $request->first_name;
+            $order->last_name = $request->last_name;
+            $order->email = $request->email;
+            $order->mobile = $request->mobile;
+            $order->address = $request->address;
+            $order->apartment = $request->apartment ?? null;
+            $order->state = $request->state;
+            $order->city = $request->city;
+            $order->zip = $request->zip;
+            $order->notes = !empty($request->order_notes) ? $request->order_notes : '';
+            $order->country_id = $request->country;
+            $order->save();
+
+            // Store order items in order items table
+            foreach(Cart::content() as $item){
+                $orderItem = new OrderItem();
+                $orderItem->order_id = $order->id;
+                $orderItem->product_id = $item->id;
+                $orderItem->name = $item->name;
+                $orderItem->qty = $item->qty;
+                $orderItem->price = $item->price;
+                $orderItem->total = $item->price * $item->qty;
+                $orderItem->save();
+            }
+
+            // Clear cart after successful order
+            Cart::destroy();
+
+            session()->flash('success', 'You have successfully placed your order.');
+
+            return response()->json([
+                'message' => 'Order saved successfully',
+                'orderId' => $order->id,
+                'status' => true,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Payment method not supported yet',
+            ]);
+        }
+    }
+    public function thankyou($orderId)
+    {
+        $order = Order::with('orderItems')->find($orderId);
+        
+        if(empty($order)){
+            return redirect()->route('front.home');
+        }
+
+        // Check if user is authenticated and owns this order
+        if(Auth::check() && Auth::id() != $order->user_id){
+            return redirect()->route('front.home');
+        }
+
+        return view('front.thanks', [
+            'order' => $order
         ]);
     }
 }
