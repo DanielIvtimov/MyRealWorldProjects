@@ -107,23 +107,23 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card cart-summery">
-                        <div class="sub-title">
-                            <h2 class="bg-white">Cart Summery</h3>
-                        </div>
                         <div class="card-body">
+                            <div class="sub-title">
+                                <h2 class="bg-white">Cart Summery</h3>
+                            </div>
                             <div class="d-flex justify-content-between pb-2">
                                 <div>Subtotal</div>
                                 <div>${{ number_format($cartSubtotal ?? 0, 2) }}</div>
                             </div>
-                            <div class="d-flex justify-content-between pb-2">
+                            <!-- <div class="d-flex justify-content-between pb-2">
                                 <div>Shipping</div>
                                 <div>${{ number_format($cartShipping ?? 0, 2) }}</div>
                             </div>
                             <div class="d-flex justify-content-between summery-end">
                                 <div><strong>Total</strong></div>
                                 <div><strong>${{ number_format($cartTotal ?? 0, 2) }}</strong></div>
-                            </div>
-                            <div class="pt-5">
+                            </div> -->
+                            <div class="pt-2">
                                 @if(!empty($cartContent) && $cartContent->count() > 0)
                                     <a href="{{ route('front.checkout') }}" class="btn-dark btn btn-block w-100">Proceed to Checkout</a>
                                 @else

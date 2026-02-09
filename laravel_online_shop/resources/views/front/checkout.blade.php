@@ -133,15 +133,15 @@
 
                                 <div class="d-flex justify-content-between summery-end">
                                     <div class="h6"><strong>Subtotal</strong></div>
-                                    <div class="h6"><strong>${{ Cart::subtotal() }}</strong></div>
+                                    <div class="h6"><strong id="subTotal">${{ Cart::subtotal() }}</strong></div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
-                                    <div class="h6"><strong>$20</strong></div>
+                                    <div class="h6"><strong id="shippingCharge">${{ number_format($totalShippingCharge ?? 0, 2) }}</strong></div>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2 summery-end">
                                     <div class="h5"><strong>Total</strong></div>
-                                    <div class="h5"><strong>${{ Cart::total() }}</strong></div>
+                                    <div class="h5"><strong id="grandTotal">${{ number_format($grandTotal ?? 0, 2) }}</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -263,6 +263,30 @@
                         console.log(xhr.responseText);
                         alert('An error occurred. Please try again.');
                     }
+                }
+            });
+        });
+
+        $("#country").change(function(){
+            $.ajax({
+                url: "{{ route('front.getOrderSummery') }}",
+                type: "post",
+                data: {
+                    country_id: $(this).val(),
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                }, 
+                dataType: "json",
+                success: function(response){
+                    if(response.status == true){
+                        $("#shippingCharge").html('$' + response.shippingCharge);
+                        $("#grandTotal").html('$' + response.grandTotal);
+                    } else {
+                        $("#shippingCharge").html('$0.00');
+                        $("#grandTotal").html('$' + response.grandTotal);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.log("Something went wrong");
                 }
             });
         });

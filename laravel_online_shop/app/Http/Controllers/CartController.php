@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Country;
+use App\Models\ShippingCharge;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\CustomerAddress;
@@ -237,9 +238,39 @@ class CartController extends Controller
 
         $countries = Country::orderBy('name', 'ASC')->get();
 
+        // Calculate shipping here
+        $totalQty = 0;
+        $totalShippingCharge = 0;
+        $grandTotal = 0;
+        
+        foreach(Cart::content() as $item){
+            $totalQty += $item->qty;
+        }
+        
+        // If customer has address, calculate shipping based on country
+        if(!empty($customerAddress) && !empty($customerAddress->country_id)){
+            $userCountry = $customerAddress->country_id;
+            
+            // Try to find specific shipping for user's country
+            $shippingInfo = ShippingCharge::where('country_id', $userCountry)->first();
+            // Fallback to "rest_of_world" if no specific record
+            if(empty($shippingInfo)){
+                $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+            }
+            
+            // If we have shipping info, calculate per-quantity charge; otherwise keep 0
+            if(!empty($shippingInfo)){
+                $totalShippingCharge = $totalQty * $shippingInfo->amount;
+            }
+        }
+
+        $grandTotal = Cart::subtotal(2, '.', '') + $totalShippingCharge;
+
         return view('front.checkout', [
             'countries' => $countries,
-            'customerAddress' => $customerAddress 
+            'customerAddress' => $customerAddress,
+            'totalShippingCharge' => $totalShippingCharge,
+            'grandTotal' => $grandTotal 
         ]);
     }
     public function processCheckout(Request $request)
@@ -295,14 +326,34 @@ class CartController extends Controller
 
         // Store data in orders table 
         if($request->payment_method == 'cod'){
-            $shipping = 0;
-            $discount = 0;
+
+            // Calculate Shipping 
             $subTotal = Cart::subtotal(2, '.', '');
-            $grandTotal = $subTotal + $shipping;
+            $discount = 0;
+            
+            $shippingInfo = ShippingCharge::where('country_id', $request->country)->first();
+
+            $totalQty = 0;
+            foreach(Cart::content() as $item){
+                $totalQty += $item->qty;
+            }
+
+            $shippingCharge = 0;
+            if($shippingInfo != null){
+                $shippingCharge = $totalQty * $shippingInfo->amount;
+            } else {
+                // Fallback to "rest_of_world" if no specific record
+                $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+                if(!empty($shippingInfo)){
+                    $shippingCharge = $totalQty * $shippingInfo->amount;
+                }
+            }
+
+            $grandTotal = $subTotal + $shippingCharge;
 
             $order = new Order();
             $order->subtotal = $subTotal;
-            $order->shipping = $shipping;
+            $order->shipping = $shippingCharge;
             $order->grand_total = $grandTotal;
             $order->user_id = $user->id;
             $order->first_name = $request->first_name;
@@ -363,5 +414,53 @@ class CartController extends Controller
         return view('front.thanks', [
             'order' => $order
         ]);
+    }
+    public function getOrderSummery(Request $request)
+    {
+        $subTotal = Cart::subtotal(2, '.', '');
+
+        if($request->country_id > 0){
+
+            $shippingInfo = ShippingCharge::where('country_id', $request->country_id)->first();
+
+            $totalQty = 0;
+            foreach(Cart::content() as $item){
+                $totalQty += $item->qty;
+            }
+
+            if($shippingInfo != null){
+
+                $shippingCharge = $totalQty * $shippingInfo->amount;
+
+                $grandTotal = $subTotal + $shippingCharge;
+                return response()->json([
+                    'status' => true,
+                    'grandTotal' => number_format($grandTotal, 2),
+                    'shippingCharge' => number_format($shippingCharge, 2),
+                ]);
+            } else {
+                // Fallback to "rest_of_world" if no specific record
+                $shippingInfo = ShippingCharge::where('country_id', 'rest_of_world')->first();
+                
+                $shippingCharge = 0;
+                if(!empty($shippingInfo)){
+                    $shippingCharge = $totalQty * $shippingInfo->amount;
+                }
+                
+                $grandTotal = $subTotal + $shippingCharge; 
+
+                return response()->json([
+                    'status' => true,
+                    'grandTotal' => number_format($grandTotal, 2),
+                    'shippingCharge' => number_format($shippingCharge, 2),
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => false,
+                'grandTotal' => number_format(0, 2),
+                'shippingCharge' => number_format(0, 2),
+            ]);
+        }
     }
 }
