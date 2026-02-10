@@ -12,6 +12,7 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ShippingController;
+use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -44,7 +45,7 @@ Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.
 Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
 Route::post('/process-checkout', [CartController::class, 'processCheckout'])->name('front.processCheckout');
 Route::get('/thanks/{orderId}', [CartController::class, 'thankyou'])->name('front.thankyou');
-Route::post('/get-order-summery', [CartController::class, 'getOrderSummery'])->name("front.getOrderSummery");
+Route::post('/get-order-summery', [CartController::class, 'getOrderSummery'])->name("front.getOrderSummery"); 
 
 Route::group(['prefix' => 'account'], function(){
     Route::group(['middleware' => 'account.guest'], function(){
@@ -106,6 +107,11 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/shipping/{id}', [ShippingController::class, 'edit'])->name('shipping.edit');
         Route::put('/shipping/{id}', [ShippingController::class, 'update'])->name('shipping.update');
         Route::delete('/shipping/{id}', [ShippingController::class, 'destroy'])->name('shipping.delete');
+
+        // Coupon Code Routes 
+        Route::get('/coupouns', [DiscountCodeController::class, 'index'])->name('coupouns.index');
+        Route::get('/coupons/create', [DiscountCodeController::class, 'create'])->name('coupons.create');
+        Route::post('/coupons', [DiscountCodeController::class, 'store'])->name('coupons.store');
         
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
