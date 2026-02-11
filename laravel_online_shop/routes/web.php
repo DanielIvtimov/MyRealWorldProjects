@@ -112,6 +112,9 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/coupouns', [DiscountCodeController::class, 'index'])->name('coupouns.index');
         Route::get('/coupons/create', [DiscountCodeController::class, 'create'])->name('coupons.create');
         Route::post('/coupons', [DiscountCodeController::class, 'store'])->name('coupons.store');
+        Route::get('/coupons/{id}/edit', [DiscountCodeController::class, 'edit'])->name('coupons.edit');
+        Route::put('/coupons/{id}', [DiscountCodeController::class, 'update'])->name('coupons.update');
+        Route::delete('/coupons/{id}', [DiscountCodeController::class, 'destroy'])->name('coupons.delete');
         
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
