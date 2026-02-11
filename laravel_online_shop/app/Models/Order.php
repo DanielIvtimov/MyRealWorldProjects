@@ -14,6 +14,8 @@ class Order extends Model
         'subtotal',
         'shipping',
         'coupon_code',
+        'discount_code_id',
+        'promo_code',
         'discount',
         'grand_total',
         'first_name',

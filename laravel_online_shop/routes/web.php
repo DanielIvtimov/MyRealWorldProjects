@@ -45,7 +45,9 @@ Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.
 Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
 Route::post('/process-checkout', [CartController::class, 'processCheckout'])->name('front.processCheckout');
 Route::get('/thanks/{orderId}', [CartController::class, 'thankyou'])->name('front.thankyou');
-Route::post('/get-order-summery', [CartController::class, 'getOrderSummery'])->name("front.getOrderSummery"); 
+Route::post('/get-order-summery', [CartController::class, 'getOrderSummery'])->name("front.getOrderSummery");
+Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name("front.applyDiscount");
+Route::post('/remove-discount', [CartController::class, 'removeDiscount'])->name('front.removeDiscount');
 
 Route::group(['prefix' => 'account'], function(){
     Route::group(['middleware' => 'account.guest'], function(){

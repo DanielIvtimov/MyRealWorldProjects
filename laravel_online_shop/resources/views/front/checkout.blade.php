@@ -135,6 +135,10 @@
                                     <div class="h6"><strong>Subtotal</strong></div>
                                     <div class="h6"><strong id="subTotal">${{ Cart::subtotal() }}</strong></div>
                                 </div>
+                                <div class="d-flex justify-content-between summery-end">
+                                    <div class="h6"><strong>Discount</strong></div>
+                                    <div class="h6"><strong id="discountAmount">${{ number_format($discount ?? 0, 2) }}</strong></div>
+                                </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <div class="h6"><strong>Shipping</strong></div>
                                     <div class="h6"><strong id="shippingCharge">${{ number_format($totalShippingCharge ?? 0, 2) }}</strong></div>
@@ -145,6 +149,21 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="input-group apply-coupan mt-4">
+                            <input type="text" placeholder="Coupon Code" class="form-control" name="discount_code" id="discount_code">
+                            <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
+                        </div>
+
+                        <div id="discount-response-wrapper"> 
+                            @if(Session::has('code'))
+                                <div class="mt-4" id="discount-response">
+                                    <strong>{{ Session::get('code')->code }}</strong>
+                                    <a class="btn btn-sm btn-danger" id="remove-discount"><i class="fa fa-times"></i></a>
+                                </div>
+                            @endif 
+                        </div>
+                        
 
                         <div class="card payment-form">
                             <h3 class="card-title h5 mb-3">Payment Method</h3>
@@ -287,6 +306,56 @@
                 },
                 error: function(xhr, status, error){
                     console.log("Something went wrong");
+                }
+            });
+        });
+
+        $("#apply-discount").click(function(){
+            $.ajax({
+                url: "{{ route('front.applyDiscount') }}",
+                type: "post",
+                data: {code: $("#discount_code").val(), country_id: $("#country").val(), _token: $('meta[name="csrf-token"]').attr('content')},
+                dataType: "json",
+                success: function(response){
+                    if(response.status == true){
+                        $("#discountAmount").html('$' + response.discount);
+                        $("#shippingCharge").html('$' + response.shippingCharge);
+                        $("#grandTotal").html('$' + response.grandTotal);
+                        $("#discount-response-wrapper").html(response.discountString);
+                    } else {
+                        alert(response.message || "Invalid coupon code");
+                    }
+                },
+                error: function(xhr, status, error){
+                    if(xhr.responseJSON && xhr.responseJSON.message){
+                        alert(xhr.responseJSON.message);
+                    } else {
+                        alert("Something went wrong. Please try again.");
+                    }
+                }
+            });
+        });
+
+        // Use event delegation for dynamically added remove button
+        $(document).on('click', '#remove-discount', function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "{{ route('front.removeDiscount') }}",
+                type: "post",
+                data: {country_id: $("#country").val(), _token: $('meta[name="csrf-token"]').attr('content')},
+                dataType: "json",
+                success: function(response){
+                    if(response.status == true){
+                        $("#discountAmount").html('$' + response.discount);
+                        $("#shippingCharge").html('$' + response.shippingCharge);
+                        $("#grandTotal").html('$' + response.grandTotal);
+                        $("#discount-response-wrapper").html('');
+                    } else {
+                        alert(response.message || "Something went wrong");
+                    }
+                },
+                error: function(xhr, status, error){
+                    alert("Something went wrong. Please try again.");
                 }
             });
         });
