@@ -323,7 +323,7 @@
                         $("#grandTotal").html('$' + response.grandTotal);
                         $("#discount-response-wrapper").html(response.discountString);
                     } else {
-                        alert(response.message || "Invalid coupon code");
+                        $("#discount-response-wrapper").html("<span class='text-danger'>" + response.message + "</span>"); 
                     }
                 },
                 error: function(xhr, status, error){

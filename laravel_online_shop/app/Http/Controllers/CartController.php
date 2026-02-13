@@ -702,6 +702,32 @@ class CartController extends Controller
             }
         }
 
+        // Max Uses Check
+        if(!empty($code->max_uses) && $code->max_uses > 0){
+            $couponUsedCount = Order::where('discount_code_id', $code->id)->count();
+
+            if($couponUsedCount >= $code->max_uses){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Coupon has reached the maximum usage limit',
+                ]);
+            }
+        }
+
+        // Max Uses Check by User
+        if(Auth::check() && !empty($code->max_uses_user) && $code->max_uses_user > 0){
+            $couponUsedByUserCount = Order::where('discount_code_id', $code->id)
+                ->where('user_id', Auth::user()->id)
+                ->count();
+            
+            if($couponUsedByUserCount >= $code->max_uses_user){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You have already used this coupon code the maximum number of times allowed.',
+                ]);
+            }
+        }
+
         session()->put('code', $code);
         
         // Call getOrderSummery with proper request
