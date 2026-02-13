@@ -18,6 +18,8 @@ class Order extends Model
         'promo_code',
         'discount',
         'grand_total',
+        'payment_status',
+        'status',
         'first_name',
         'last_name',
         'email',

@@ -486,7 +486,9 @@ class CartController extends Controller
             $order->zip = $request->zip;
             $order->notes = !empty($request->order_notes) ? $request->order_notes : '';
             $order->country_id = $request->country;
-            $order->save();
+            $order->payment_status = "not paid";
+            $order->status = "pending";
+             $order->save();
 
             // Store order items in order items table
             foreach(Cart::content() as $item){

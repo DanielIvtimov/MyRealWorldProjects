@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class AuthController extends Controller
 {
@@ -91,5 +93,40 @@ class AuthController extends Controller
     {
         Auth::logout();
         return redirect()->route('front.account.login')->with('success', 'You have been logged out successfully.');
+    }
+
+    public function orders()
+    {
+        $user = Auth::user();
+
+        if(empty($user)){
+            return redirect()->route('account.login');
+        }
+
+        $orders = Order::where('user_id', $user->id)->orderBy('id', 'DESC')->get();
+
+        $data['orders'] = $orders;
+
+        return view('front.account.order', $data);
+    }
+    public function orderDetail($id)
+    {
+        $user = Auth::user();
+        
+        if(empty($user)){
+            return redirect()->route('account.login');
+        }
+        
+        $order = Order::where('user_id', $user->id)->where('id', $id)->first();
+        
+        if(empty($order)){
+            return redirect()->route('front.account.orders')->with('error', 'Order not found');
+        }
+
+        $orderItems = OrderItem::where('order_id', $order->id)->get();
+        
+        $data['order'] = $order;
+        $data['orderItems'] = $orderItems;
+        return view('front.account.order-detail', $data);
     }
 }
