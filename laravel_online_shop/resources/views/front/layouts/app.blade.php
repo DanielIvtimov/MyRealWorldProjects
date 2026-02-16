@@ -65,7 +65,7 @@ $categories = getCategories();
 				@if(Auth::check())
 					<a href="{{ route('account.profile')}}" class="nav-link text-dark">My Account</a>
 				@else   
-					<a href="{{ route('front.login')}}" class="nav-link text-dark">Login/Register</a>
+					<a href="{{ route('account.login')}}" class="nav-link text-dark">Login/Register</a>
 				@endif
 				<form action="">					
 					<div class="input-group">

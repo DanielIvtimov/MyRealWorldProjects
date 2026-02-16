@@ -13,6 +13,7 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\DiscountCodeController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -119,6 +120,10 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/coupons/{id}/edit', [DiscountCodeController::class, 'edit'])->name('coupons.edit');
         Route::put('/coupons/{id}', [DiscountCodeController::class, 'update'])->name('coupons.update');
         Route::delete('/coupons/{id}', [DiscountCodeController::class, 'destroy'])->name('coupons.delete');
+
+        // Order Routes
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{id}', [OrderController::class, 'detail'])->name('orders.detail');
         
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
