@@ -21,6 +21,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-9">
+                    @include('admin.message')
                     <div class="card">
                         <div class="card-header pt-3">
                             <div class="row invoice-info">
@@ -39,6 +40,12 @@
                                         Phone: {{ $order->mobile }}<br>
                                         Email: {{ $order->email }}
                                     </address>
+                                    <strong>Shipping Date:</strong><br />
+                                    @if(!empty($order->shipping_date))
+                                        {{ \Carbon\Carbon::parse($order->shipping_date)->format('d M, Y') }}
+                                    @else 
+                                        <span class="text-muted">N/A</span>
+                                    @endif
                                 </div>
 
 
@@ -125,24 +132,31 @@
                     <div class="card">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Order Status</h2>
-                            <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
-                                    <option value="pending" {{ ($order->status == 'pending') ? 'selected' : '' }}>Pending</option>
-                                    <option value="shipped" {{ ($order->status == 'shipped') ? 'selected' : '' }}>Shipped</option>
-                                    <option value="delivered" {{ ($order->status == 'delivered') ? 'selected' : '' }}>Delivered</option>
-                                    <!-- <option value="">Cancelled</option> -->
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary">Update</button>
-                            </div>
+                            <form id="changeOrderStatusForm" name="changeOrderStatusForm" method="post">
+                                @csrf
+                                <div class="mb-3">
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="pending" {{ ($order->status == 'pending') ? 'selected' : '' }}>Pending</option>
+                                        <option value="shipped" {{ ($order->status == 'shipped') ? 'selected' : '' }}>Shipped</option>
+                                        <option value="delivered" {{ ($order->status == 'delivered') ? 'selected' : '' }}>Delivered</option>
+                                        <option value="cancelled" {{ ($order->status == 'cancelled') ? 'selected' : '' }}>Cancelled</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shipping_date">Shipping Date</label>
+                                    <input placeholder="Shipped Date" type="text" name="shipping_date" id="shipping_date" class="form-control" value="{{ !empty($order->shipping_date) ? \Carbon\Carbon::parse($order->shipping_date)->format('Y-m-d H:i:s') : '' }}" />
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="h4 mb-3">Send Inovice Email</h2>
+                            <h2 class="h4 mb-3">Send Invoice Email</h2>
                             <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
+                                <select name="email_recipient" id="email_recipient" class="form-control">
                                     <option value="">Customer</option>
                                     <option value="">Admin</option>
                                 </select>
@@ -158,4 +172,37 @@
         <!-- /.card -->
     </section>
     <!-- /.content -->
+@endsection
+
+@section('customJs')
+    <script>
+        $(document).ready(function(){
+            $('#shipping_date').datetimepicker({
+                format: 'Y-m-d H:i:s',
+            });
+        });
+
+        $("#changeOrderStatusForm").submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: "{{ route('orders.changeOrderStatus', $order->id) }}",
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(response){
+                    if(response.status == 'success'){
+                        window.location.href = "{{ route('orders.detail', $order->id) }}";
+                    }
+                },
+                error: function(xhr, status, error){
+                    if(xhr.responseJSON && xhr.responseJSON.message){
+                        alert(xhr.responseJSON.message);
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

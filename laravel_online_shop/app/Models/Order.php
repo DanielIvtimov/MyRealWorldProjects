@@ -20,6 +20,7 @@ class Order extends Model
         'grand_total',
         'payment_status',
         'status',
+        'shipping_date',
         'first_name',
         'last_name',
         'email',

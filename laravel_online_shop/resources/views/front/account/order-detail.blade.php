@@ -39,10 +39,14 @@
                                         </div>
                                         <div class="col-6 col-lg-3">
                                             <!-- Heading -->
-                                            <h6 class="heading-xxxs text-muted">Order Date:</h6>
+                                            <h6 class="heading-xxxs text-muted">Shipped Date:</h6>
                                             <!-- Text -->
                                             <p class="mb-lg-0 fs-sm fw-bold">
-                                                {{ \Carbon\Carbon::parse($order->created_at)->format('d M, Y') }}
+                                                @if(!empty($order->shipping_date))
+                                                    {{ \Carbon\Carbon::parse($order->shipping_date)->format('d M, Y') }}
+                                                @else 
+                                                    <span class="text-muted">N/A</span>
+                                                @endif
                                             </p>
                                         </div>
                                         <div class="col-6 col-lg-3">

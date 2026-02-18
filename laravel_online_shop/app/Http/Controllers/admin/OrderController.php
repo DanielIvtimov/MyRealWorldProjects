@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -47,6 +49,49 @@ class OrderController extends Controller
         return view('admin.orders.detail', [
             'order' => $order,
             'orderItems' => $orderItems,
+        ]);
+    }
+    public function changeOrderStatus(Request $request, $id)
+    {
+        $order = Order::find($id);
+        
+        if(empty($order)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Order not found',
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:pending,shipped,delivered,cancelled',
+            'shipping_date' => 'nullable|date',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'message' => 'Please fix the errors',
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $order->status = $request->status;
+        
+        if(!empty($request->shipping_date)){
+            $order->shipping_date = Carbon::parse($request->shipping_date);
+        } else {
+            $order->shipping_date = null;
+        }
+        
+        $order->save();
+
+        $message = 'Order status changed successfully';
+
+        session()->flash('success', $message);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => $message,
         ]);
     }
 }
