@@ -515,6 +515,9 @@ class CartController extends Controller
             // Clear cart after successful order
             Cart::destroy();
 
+            // Send Order Email
+            orderEmail($order->id);
+
             session()->flash('success', 'You have successfully placed your order.');
 
             return response()->json([

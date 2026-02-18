@@ -20,6 +20,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Helpers\helper;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ use Illuminate\Support\Str;
 
 // Route::get('/', function () {
 //     return view('welcome');
+// });
+
+// Route::get('/test', function(){
+//     orderEmail(3);
 // });
 
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
