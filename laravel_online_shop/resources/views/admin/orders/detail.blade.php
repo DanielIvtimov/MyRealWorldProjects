@@ -154,16 +154,19 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="h4 mb-3">Send Invoice Email</h2>
-                            <div class="mb-3">
-                                <select name="email_recipient" id="email_recipient" class="form-control">
-                                    <option value="">Customer</option>
-                                    <option value="">Admin</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary">Send</button>
-                            </div>
+                            <form action="" method="POST" name="sendInvoiceEmail" id="sendInvoiceEmail">
+                                @csrf
+                                <h2 class="h4 mb-3">Send Invoice Email</h2>
+                                <div class="mb-3">
+                                    <select name="userType" id="userType" class="form-control">
+                                        <option value="customer">Customer</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Send</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -184,25 +187,54 @@
 
         $("#changeOrderStatusForm").submit(function(e){
             e.preventDefault();
+            if(confirm('Are you sure you want to change order status?')){
+                $.ajax({
+                    url: "{{ route('orders.changeOrderStatus', $order->id) }}",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(response){
+                        if(response.status == 'success'){
+                            window.location.href = "{{ route('orders.detail', $order->id) }}";
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        if(xhr.responseJSON && xhr.responseJSON.message){
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            alert('An error occurred. Please try again.');
+                        }
+                    }
+                });
+            }
+        });
 
-            $.ajax({
-                url: "{{ route('orders.changeOrderStatus', $order->id) }}",
-                type: "POST",
-                data: $(this).serialize(),
-                dataType: "json",
-                success: function(response){
-                    if(response.status == 'success'){
-                        window.location.href = "{{ route('orders.detail', $order->id) }}";
+        $("#sendInvoiceEmail").submit(function(e){
+            e.preventDefault();
+            
+            if(confirm('Are you sure you want to send email?')){
+                $.ajax({
+                    url: "{{ route('orders.sendInvoiceEmail', $order->id) }}",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    dataType: "json",
+                    success: function(response){
+                        if(response.status == true){
+                            alert(response.message);
+                            window.location.href = "{{ route('orders.detail', $order->id) }}";
+                        } else {
+                            alert(response.message || 'Failed to send email. Please try again.');
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        if(xhr.responseJSON && xhr.responseJSON.message){
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            alert('An error occurred while sending email. Please try again.');
+                        }
                     }
-                },
-                error: function(xhr, status, error){
-                    if(xhr.responseJSON && xhr.responseJSON.message){
-                        alert(xhr.responseJSON.message);
-                    } else {
-                        alert('An error occurred. Please try again.');
-                    }
-                }
-            });
+                });
+            }
         });
     </script>
 @endsection

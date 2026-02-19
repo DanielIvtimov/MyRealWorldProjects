@@ -20,7 +20,7 @@ function getProductImage($productId){
     return ProductImage::where('product_id', $productId)->first();
 }
 
-function orderEmail($orderId){
+function orderEmail($orderId, $userType="customer"){
     try {
         $order = Order::where('id', $orderId)->with('items')->first(); 
         
@@ -28,18 +28,31 @@ function orderEmail($orderId){
             \Log::error('Order not found for email: ' . $orderId);
             return false;
         }
-        
-        if(empty($order->email)){
-            \Log::error('Order email address is empty for order: ' . $orderId);
-            return false;
+
+        if($userType == 'customer'){
+            if(empty($order->email)){
+                \Log::error('Order email address is empty for order: ' . $orderId);
+                return false;
+            }
+            $subject = 'Thanks for your order';
+            $email = $order->email;
+        } else {
+            $email = env('ADMIN_EMAIL');
+            
+            if(empty($email)){
+                \Log::error('ADMIN_EMAIL is not configured in .env file');
+                return false;
+            }
+            $subject = 'You have received a new order';
         }
 
         $mailData = [
-            'subject' => 'Thanks for your order',
+            'subject' => $subject,
             'order' => $order,
+            'userType' => $userType,
         ];
 
-        Mail::to($order->email)->send(new OrderEmail($mailData));
+        Mail::to($email)->send(new OrderEmail($mailData));
         return true;
     } catch (\Exception $e) {
         \Log::error('Error sending order email: ' . $e->getMessage());

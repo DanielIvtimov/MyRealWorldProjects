@@ -17,8 +17,13 @@
                     <!-- Header -->
                     <tr>
                         <td style="background-color: #007bff; padding: 30px 40px; text-align: center;">
-                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">Thank You For Your Order!</h1>
-                            <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 16px;">We've received your order and will process it shortly.</p>
+                            @if(isset($mailData['userType']) && $mailData['userType'] == 'customer')
+                                <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">Thank You For Your Order!</h1>
+                                <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 16px;">We've received your order and will process it shortly.</p>
+                            @else
+                                <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">New Order Received!</h1>
+                                <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 16px;">You have received a new order that requires your attention.</p>
+                            @endif
                         </td>
                     </tr>
 
@@ -170,10 +175,17 @@
                     <!-- Footer -->
                     <tr>
                         <td style="background-color: #f8f9fa; padding: 30px 40px; text-align: center; border-top: 1px solid #dee2e6;">
-                            <p style="margin: 0 0 10px 0; color: #666666; font-size: 14px; line-height: 1.6;">
-                                Thank you for shopping with us!<br>
-                                If you have any questions about your order, please don't hesitate to contact our support team.
-                            </p>
+                            @if(isset($mailData['userType']) && $mailData['userType'] == 'customer')
+                                <p style="margin: 0 0 10px 0; color: #666666; font-size: 14px; line-height: 1.6;">
+                                    Thank you for shopping with us!<br>
+                                    If you have any questions about your order, please don't hesitate to contact our support team.
+                                </p>
+                            @else
+                                <p style="margin: 0 0 10px 0; color: #666666; font-size: 14px; line-height: 1.6;">
+                                    Please review this order and process it accordingly.<br>
+                                    This order requires your attention in the admin panel.
+                                </p>
+                            @endif
                             <p style="margin: 20px 0 0 0; color: #999999; font-size: 12px;">
                                 This is an automated email. Please do not reply to this message.
                             </p>

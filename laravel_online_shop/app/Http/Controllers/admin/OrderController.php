@@ -94,4 +94,45 @@ class OrderController extends Controller
             'message' => $message,
         ]);
     }
+
+    public function sendInvoiceEmail(Request $request, $orderId)
+    {
+        $order = Order::find($orderId);
+        
+        if(empty($order)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Order not found',
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'userType' => 'required|in:customer,admin',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'message' => 'Please select a valid recipient type',
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $result = orderEmail($orderId, $request->userType);
+
+        if($result === false){
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to send email. Please check the logs for more details.',
+            ]);
+        }
+
+        $message = 'Order email sent successfully';
+        session()->flash('success', $message);
+
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+        ]);
+    }
 }
