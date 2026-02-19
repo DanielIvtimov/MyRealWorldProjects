@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Wishlist;
 
 class FrontController extends Controller
 {
@@ -26,6 +28,42 @@ class FrontController extends Controller
         return view('front.home', [
             'featuredProducts' => $featuredProducts,
             'latestProducts'   => $latestProducts,
+        ]);
+    }
+    public function addToWishList(Request $request, $productId){
+        if(Auth::check() == false){
+            session(['url.intended' => url()->previous()]);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Please login to add to wishlist',
+            ]);
+        }
+
+        // Check if product exists
+        $product = Product::find($productId);
+        if(empty($product)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Product not found',
+            ]);
+        }
+
+        // Add to wishlist (updateOrCreate handles duplicates automatically)
+        Wishlist::updateOrCreate(
+            [
+                'user_id' => Auth::user()->id,
+                'product_id' => $productId,
+            ],
+            [
+                'user_id' => Auth::user()->id,
+                'product_id' => $productId,
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => '<div class="alert alert-success"><strong>"'.$product->title.'"</strong> added to wishlist successfully</div>',
         ]);
     }
 }
