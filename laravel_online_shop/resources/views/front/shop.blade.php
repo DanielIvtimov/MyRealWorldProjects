@@ -219,6 +219,12 @@
                 params.push('price_max=' + slider.result.to);
             }
 
+            // Add search keyword if provided
+            let keyword = $("#search").val();
+            if(keyword && keyword.trim().length > 0){
+                params.push('search=' + encodeURIComponent(keyword.trim()));
+            }
+
             // Add sorting parameter
             params.push('sort=' + $("#sort").val());
 

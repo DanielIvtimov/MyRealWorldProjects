@@ -62,6 +62,14 @@ class ShopController extends Controller
             $products->whereBetween('price', [$minPrice, $maxPrice]);
         }
 
+        // Filter by search keyword if provided
+        if(!empty($request->get('search'))){
+            $searchKeyword = trim($request->get('search'));
+            if(!empty($searchKeyword)){
+                $products->where('title', 'like', '%'.$searchKeyword.'%');
+            }
+        }
+
         // Get default price values for slider initialization
         $priceMin = !empty($priceMin) ? intval($priceMin) : 0;
         $priceMax = !empty($priceMax) ? intval($priceMax) : 1000;
