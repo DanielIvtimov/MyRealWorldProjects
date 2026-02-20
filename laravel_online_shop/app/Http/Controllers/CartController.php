@@ -490,7 +490,7 @@ class CartController extends Controller
             $order->status = "pending";
              $order->save();
 
-            // Store order items in order items table
+            // Store order items in order items table and update product stock
             foreach(Cart::content() as $item){
                 // Ensure all values are properly formatted
                 $itemPrice = (float) $item->price;
@@ -510,7 +510,23 @@ class CartController extends Controller
                 $orderItem->price = round($itemPrice, 2);
                 $orderItem->total = $itemTotal;
                 $orderItem->save();
+
+                // Update Product Stock for each item
+                $productData = Product::find($item->id);
+                if(!empty($productData) && $productData->track_qty == "Yes"){
+                    $currentQty = (int) $productData->qty;
+                    // Ensure current quantity is not negative
+                    if($currentQty < 0) $currentQty = 0;
+                    
+                    $updatedQty = $currentQty - $itemQty;
+                    // Ensure updated quantity is not negative
+                    if($updatedQty < 0) $updatedQty = 0;
+                    
+                    $productData->qty = $updatedQty;
+                    $productData->save();
+                }
             }
+            
 
             // Clear cart after successful order
             Cart::destroy();

@@ -22,12 +22,12 @@
                             @if($product->productImages && $product->productImages->isNotEmpty())
                                 @foreach($product->productImages as $key => $image)
                                     <div class="carousel-item {{ $key === 0 ? 'active' : '' }}">
-                                        <img class="w-100 h-100" src="{{ asset('uploads/product/large/' . $image->image) }}"/>
+                                        <img class="w-100 h-100" src="{{ asset('uploads/product/large/' . $image->image) }}" />
                                     </div>
-                                @endforeach 
+                                @endforeach
                             @else
                                 <div class="carousel-item active">
-                                    <img class="w-100 h-100" src="{{ asset('admin-assets/img/default-150x150.png') }}"/>
+                                    <img class="w-100 h-100" src="{{ asset('admin-assets/img/default-150x150.png') }}" />
                                 </div>
                             @endif
                         </div>
@@ -52,12 +52,27 @@
                             </div>
                             <small class="pt-1">(99 Reviews)</small>
                         </div>
-                        @if($product->compare_price > 0 && $product->compare_price > $product->price) 
+                        @if($product->compare_price > 0 && $product->compare_price > $product->price)
                             <h2 class="price text-secondary"><del>${{ $product->compare_price }}</del></h2>
-                        @endif 
+                        @endif
                         <h2 class="price ">${{ $product->price }}</h2>
                         {!! $product->short_description !!}
-                        <a href="javascript:void(0)" onClick="addToCart({{ $product->id }})" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART</a>
+                        
+                        @if($product->track_qty == "Yes")
+                            @if($product->qty > 0)
+                                <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $product->id }})">
+                                    <i class="fa fa-shopping-cart"></i> &nbsp;Add To Cart
+                                </a>
+                            @else
+                                <a class="btn btn-dark disabled" href="javascript:void(0)" style="cursor: not-allowed; opacity: 0.6;">
+                                    Out Of Stock
+                                </a>
+                            @endif
+                        @else
+                            <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $product->id }})">
+                                <i class="fa fa-shopping-cart"></i> &nbsp;Add To Cart
+                            </a>
+                        @endif
                     </div>
                 </div>
 
@@ -122,13 +137,26 @@
                                     <a class="whishlist" href="#"><i class="far fa-heart"></i></a>
 
                                     <div class="product-action">
-                                        <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $relProduct->id }})">
-                                            <i class="fa fa-shopping-cart"></i> Add To Cart
-                                        </a>
+                                        @if($relProduct->track_qty == "Yes")
+                                            @if($relProduct->qty > 0)
+                                                <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $relProduct->id }})">
+                                                    <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                </a>
+                                            @else
+                                                <a class="btn btn-dark disabled" href="javascript:void(0)" style="cursor: not-allowed; opacity: 0.6;">
+                                                    Out Of Stock
+                                                </a>
+                                            @endif
+                                        @else
+                                            <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $relProduct->id }})">
+                                                <i class="fa fa-shopping-cart"></i> Add To Cart
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="card-body text-center mt-3">
-                                    <a class="h6 link" href="{{ route('front.product', $relProduct->slug) }}">{{ $relProduct->title }}</a>
+                                    <a class="h6 link"
+                                        href="{{ route('front.product', $relProduct->slug) }}">{{ $relProduct->title }}</a>
                                     <div class="price mt-2">
                                         <span class="h5"><strong>${{ $relProduct->price }}</strong></span>
                                         @if($relProduct->compare_price > 0 && $relProduct->compare_price > $relProduct->price)

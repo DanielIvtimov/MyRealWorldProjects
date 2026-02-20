@@ -120,9 +120,21 @@
                                             <a class="whishlist" href="222"><i class="far fa-heart"></i></a> 
 
                                             <div class="product-action">
-                                                <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $product->id }})">
-                                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                                </a>
+                                                @if($product->track_qty == "Yes")
+                                                    @if($product->qty > 0)
+                                                        <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $product->id }})">
+                                                            <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                        </a>
+                                                    @else 
+                                                        <a class="btn btn-dark disabled" href="javascript:void(0)" style="cursor: not-allowed; opacity: 0.6;">
+                                                            Out Of Stock 
+                                                        </a>
+                                                    @endif
+                                                @else 
+                                                    <a class="btn btn-dark" href="javascript:void(0)" onClick="addToCart({{ $product->id }})">
+                                                        <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                    </a>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="card-body text-center mt-3">
