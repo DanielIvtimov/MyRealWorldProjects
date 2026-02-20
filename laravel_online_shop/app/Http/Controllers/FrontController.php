@@ -49,17 +49,23 @@ class FrontController extends Controller
             ]);
         }
 
-        // Add to wishlist (updateOrCreate handles duplicates automatically)
-        Wishlist::updateOrCreate(
-            [
-                'user_id' => Auth::user()->id,
-                'product_id' => $productId,
-            ],
-            [
-                'user_id' => Auth::user()->id,
-                'product_id' => $productId,
-            ]
-        );
+        // Check if product is already in wishlist
+        $existingWishlist = Wishlist::where('user_id', Auth::user()->id)
+            ->where('product_id', $productId)
+            ->first();
+
+        if(!empty($existingWishlist)){
+            return response()->json([
+                'status' => false,
+                'message' => '<div class="alert alert-info"><strong>"'.$product->title.'"</strong> is already in your wishlist</div>',
+            ]);
+        }
+
+        // Add to wishlist
+        Wishlist::create([
+            'user_id' => Auth::user()->id,
+            'product_id' => $productId,
+        ]);
 
         return response()->json([
             'status' => true,

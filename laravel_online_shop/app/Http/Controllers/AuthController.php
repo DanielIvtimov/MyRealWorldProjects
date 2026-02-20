@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Wishlist;
 
 class AuthController extends Controller
 {
@@ -129,4 +130,55 @@ class AuthController extends Controller
         $data['orderItems'] = $orderItems;
         return view('front.account.order-detail', $data);
     }
+    public function wishlist()
+    {
+        $user = Auth::user();
+        
+        if(empty($user)){
+            return redirect()->route('account.login');
+        }
+
+        $wishlists = Wishlist::where('user_id', $user->id)
+            ->with(['product.productImages'])
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $data['wishlists'] = $wishlists;
+
+        return view('front.account.wishlist', $data);
+    }
+
+    public function removeProductFromWishList(Request $request, $id)
+    {
+        $user = Auth::user();
+        
+        if(empty($user)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Please login to continue'
+            ]);
+        }
+
+        // $id is the product_id from the route parameter
+        $wishlist = Wishlist::where('user_id', $user->id)
+            ->where('product_id', $id)
+            ->first(); 
+            
+        if(empty($wishlist)){
+            session()->flash('error', 'Product already removed from wishlist');
+            return response()->json([
+                'status' => false,
+                'message' => 'Product already removed from wishlist'
+            ]);
+        } else {
+            $wishlist->delete();
+            session()->flash('success', 'Product removed from wishlist successfully');
+            return response()->json([
+                'status' => true,
+                'message' => 'Product removed from wishlist successfully'
+            ]);
+        }
+    }
 }
+
+

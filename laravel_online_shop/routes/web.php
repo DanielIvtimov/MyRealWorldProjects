@@ -67,6 +67,8 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/profile', [AuthController::class, 'profile'])->name('account.profile');
         Route::get('/logout', [AuthController::class, 'logout'])->name('account.logout');
         Route::get('/my-orders', [AuthController::class, 'orders'])->name('account.orders');
+        Route::get('/my-wishlist', [AuthController::class, 'wishlist'])->name('account.wishlist');
+        Route::post('/remove-product-from-wishlist/{id}', [AuthController::class, 'removeProductFromWishList'])->name('account.removeProductFromWishList');
         Route::get('/order-detail/{id}', [AuthController::class, 'orderDetail'])->name('account.orderDetail');
     });
 });
