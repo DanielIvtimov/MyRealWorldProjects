@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Wishlist;
+use App\Models\Country;
+use App\Models\CustomerAddress;
 
 class AuthController extends Controller
 {
@@ -88,8 +90,16 @@ class AuthController extends Controller
     }
     public function profile()
     {
-        $user = Auth::user();
-        return view('front.account.profile', compact('user'));
+
+        $userId = Auth::user()->id;
+
+        $countries = Country::orderBy('name', 'ASC')->get();
+
+        $user = User::where('id', $userId)->first();
+
+        $address = CustomerAddress::where('user_id', $userId)->first();
+
+        return view('front.account.profile', compact('user', 'countries', 'address'));
     }
 
     public function updateProfile(Request $request)
@@ -113,6 +123,54 @@ class AuthController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Profile successfully updated'
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors()
+        ]);
+    }
+
+    public function updateAddress(Request $request)
+    {
+        $userId = Auth::user()->id;
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|min:2|max:255',
+            'last_name' => 'required|min:2|max:255',
+            'email' => 'required|email',
+            'country_id' => 'required|exists:countries,id',
+            'address' => 'required|min:5|max:500',
+            'apartment' => 'nullable|string|max:100',
+            'city' => 'required|min:2|max:100',
+            'state' => 'required|min:2|max:100',
+            'zip' => 'required|min:2|max:20',
+            'mobile' => 'required|string|max:20',
+        ]);
+
+        if ($validator->passes()) {
+            CustomerAddress::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'country_id' => $request->country_id,
+                    'address' => $request->address,
+                    'apartment' => $request->apartment ?? null,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'zip' => $request->zip,
+                    'mobile' => $request->mobile,
+                ]
+            );
+
+            session()->flash('success', 'Address successfully updated');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Address successfully updated'
             ]);
         }
 
