@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -136,6 +137,9 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/orders/{id}', [OrderController::class, 'detail'])->name('orders.detail');
         Route::post('/order/change-status/{id}', [OrderController::class, 'changeOrderStatus'])->name('orders.changeOrderStatus');
         Route::post('/order/send-email/{id}', [OrderController::class, 'sendInvoiceEmail'])->name('orders.sendInvoiceEmail');
+
+        // User Routes
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
         
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
