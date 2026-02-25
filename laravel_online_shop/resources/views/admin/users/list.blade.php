@@ -75,7 +75,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="">
+                                                <a href="{{ route('users.edit', $user->id) }}">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path
@@ -111,4 +111,37 @@
             <!-- /.card -->
         </section>
         <!-- /.content -->
+@endsection
+
+@section('customJs')
+    <script>
+        function deleteUser(id){
+            let url = "{{ route('users.delete', 'ID')}}";
+            let newUrl = url.replace('ID', id);
+
+            if(confirm("Are you sure you want to delete this user?")){
+                $.ajax({
+                    url: newUrl,
+                    type: "post",
+                    data: {
+                        _method: 'DELETE',
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    dataType: "json",
+                    success: function(response){
+                        if(response["status"] == true){
+                            window.location.href = "{{ route('users.index') }}";
+                        } else {
+                            alert(response["message"] || "Something went wrong");
+                        }
+                    },
+                    error: function(jqXHR, exception){
+                        console.log("Something went wrong");
+                        console.log(jqXHR);
+                        alert("Something went wrong. Please try again.");
+                    }
+                });
+            }
+        }
+    </script>
 @endsection
