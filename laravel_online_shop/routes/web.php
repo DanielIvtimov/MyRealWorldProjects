@@ -151,6 +151,9 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/pages/create', [PageController::class, 'create'])->name('pages.create');
         Route::post('/pages', [PageController::class, 'store'])->name('pages.store');
         Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
+        Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');
+        Route::put('/pages/{page}', [PageController::class, 'update'])->name('pages.update');
+        Route::post('/pages/{id}/delete', [PageController::class, 'destroy'])->name('pages.delete');
         
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');

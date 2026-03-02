@@ -55,7 +55,7 @@
                                             <td>{{ $page->name }}</td>
                                             <td>{{ $page->slug }}</td>
                                             <td>
-                                                <a href="">
+                                                <a href="{{ route('pages.edit', $page->id) }}" title="Edit">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path
@@ -63,7 +63,7 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                <a href="#" onclick="deletePage({{ $page->id }})" class="text-danger w-4 h-4 mr-1">
+                                                <a href="#" onclick="deletePage({{ $page->id }}); return false;" class="text-danger w-4 h-4 mr-1" title="Delete">
                                                     <svg wire:loading.remove.delay="" wire:target=""
                                                         class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                         viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -85,14 +85,6 @@
                     </div>
                     <div class="card-footer clearfix">
                         {{ $pages->links() }}
-                        
-                    <!-- <ul class="pagination pagination m-0 float-right">
-                        <li class="page-item"><a class="page-link" href="#">«</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">»</a></li>
-                    </ul> -->
                     </div>
                 </div>
             </div>
@@ -102,5 +94,27 @@
 @endsection
 
 @section('customJs')
+<script>
+    function deletePage(id) {
+        var url = "{{ route('pages.delete', 'ID') }}".replace('ID', id);
+        if (!confirm("Are you sure you want to delete this page?")) return;
 
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: { _token: $('meta[name="csrf-token"]').attr('content') },
+            dataType: "json",
+            success: function(response) {
+                if (response.status == true) {
+                    window.location.href = "{{ route('pages.index') }}";
+                } else {
+                    alert(response.message || "Something went wrong");
+                }
+            },
+            error: function(xhr) {
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    }
+</script>
 @endsection
