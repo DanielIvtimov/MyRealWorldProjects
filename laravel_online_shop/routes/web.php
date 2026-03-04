@@ -70,6 +70,8 @@ Route::group(['prefix' => 'account'], function(){
         Route::get('/profile', [AuthController::class, 'profile'])->name('account.profile');
         Route::post('/update-profile', [AuthController::class, 'updateProfile'])->name('account.updateProfile');
         Route::post('/update-address', [AuthController::class, 'updateAddress'])->name('account.updateAddress');
+        Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('account.showChangePassword');
+        Route::post('/process-change-password', [AuthController::class, 'changePassword'])->name('account.processChangePassword');
         Route::get('/logout', [AuthController::class, 'logout'])->name('account.logout');
         Route::get('/my-orders', [AuthController::class, 'orders'])->name('account.orders');
         Route::get('/my-wishlist', [AuthController::class, 'wishlist'])->name('account.wishlist');
