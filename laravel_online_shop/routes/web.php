@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\UserController; 
 use App\Http\Controllers\admin\PageController;
+use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -157,7 +158,11 @@ Route::group(['prefix' => 'admin'], function(){
         Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');
         Route::put('/pages/{page}', [PageController::class, 'update'])->name('pages.update');
         Route::post('/pages/{id}/delete', [PageController::class, 'destroy'])->name('pages.delete');
-        
+
+        // Setting Routes
+        Route::get('/change-password', [SettingController::class, 'showChangePasswordForm'])->name('admin.showChangePasswordForm');
+        Route::post('/process-change-password', [SettingController::class, 'processChangePassword'])->name('admin.processChangePassword');
+ 
         // Product Sub Categories (AJAX)
         Route::get('/product-subcategories', [ProductSubCategoryController::class, 'index'])->name('product-subcategories.index');
         
