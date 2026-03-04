@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
+use App\Models\Page;
 
 class FrontController extends Controller
 {
@@ -71,5 +72,16 @@ class FrontController extends Controller
             'status' => true,
             'message' => '<div class="alert alert-success"><strong>"'.$product->title.'"</strong> added to wishlist successfully</div>',
         ]);
+    }
+
+    public function page($slug)
+    {
+        $page = Page::where('slug', $slug)->first();
+
+        if (empty($page)) {
+            abort(404);
+        }
+
+        return view('front.page', compact('page'));
     }
 }

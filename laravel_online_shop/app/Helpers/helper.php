@@ -6,6 +6,7 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderEmail;
 use App\Models\Country;
+use App\Models\Page;
 
 function getCategories(){
     return Category::orderBy('name', 'ASC')
@@ -62,6 +63,10 @@ function orderEmail($orderId, $userType="customer"){
 
 function getCountryInfo($countryId){
    return Country::where('id', $countryId)->first();
+}
+
+function staticPages(){
+    return Page::orderBy('id', 'ASC')->get();
 }
 
 ?>
