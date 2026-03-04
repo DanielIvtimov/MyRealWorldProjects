@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Models\Wishlist;
 use App\Models\Page;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactEmail;
 
 class FrontController extends Controller
 {
@@ -83,5 +87,57 @@ class FrontController extends Controller
         }
 
         return view('front.page', compact('page'));
+    }
+    public function sendContactEmail(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required|email',
+            'subject' => 'required|min:10',
+            'message' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ]);
+        }
+
+        $mailData = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ];
+
+        // Prefer ADMIN_EMAIL, fallback to first admin user or app email
+        $toEmail = env('ADMIN_EMAIL');
+        if (empty($toEmail)) {
+            $admin = User::where('role', 2)->first(); // role 2 = admin in this app
+            if ($admin) {
+                $toEmail = $admin->email;
+            } else {
+                $toEmail = config('mail.from.address');
+            }
+        }
+
+        try {
+            Mail::to($toEmail)->send(new ContactEmail($mailData));
+            session()->flash('success', 'Thanks for contacting us, we will get back to you soon.');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Thanks for contacting us, we will get back to you soon.',
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error sending contact email: '.$e->getMessage());
+            return response()->json([
+                'status' => false,
+                'errors' => [
+                    'general' => ['Unable to send your message right now. Please try again later.'],
+                ],
+            ], 500);
+        }
     }
 }

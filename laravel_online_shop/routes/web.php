@@ -59,6 +59,7 @@ Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name("
 Route::post('/remove-discount', [CartController::class, 'removeDiscount'])->name('front.removeDiscount');
 Route::post('/add-to-wishlist/{productId}', [FrontController::class, 'addToWishList'])->name('front.addToWithList');
 Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page');
+Route::post('/send-contact-email', [FrontController::class, 'sendContactEmail'])->name('front.sendContactEmail');
 
 Route::group(['prefix' => 'account'], function(){
     Route::group(['middleware' => 'account.guest'], function(){
