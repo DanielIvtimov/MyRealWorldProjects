@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ProductRating;
 
 class Product extends Model
 {
@@ -32,5 +33,9 @@ class Product extends Model
     public function productImages()
     {
         return $this->hasMany(ProductImage::class);
+    }
+    public function product_ratings()
+    {
+        return $this->hasMany(ProductRating::class)->where('status', 1);
     }
 }
