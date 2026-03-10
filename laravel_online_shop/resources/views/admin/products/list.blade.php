@@ -91,7 +91,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="#" class="text-danger w-4 h-4 mr-1">
+                                            <a href="javascript:void(0)" onclick="deleteProduct({{ $product->id }})" class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                 class="filament-link-icon w-4 h-4 mr-1" xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -122,5 +122,30 @@
 @endsection
 
 @section('customJs')
-
+    <script>
+        function deleteProduct(id){
+            let url = "{{ route('products.delete', 'ID') }}";
+            let newUrl = url.replace('ID', id);
+            if(confirm('Are you sure you want to delete this product?')){
+                $.ajax({
+                    url: newUrl,
+                    type: "delete",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    dataType: "json",
+                    success: function(response){
+                        if(response["status"] == true){
+                            window.location.href = "{{ route('products.index') }}";
+                        } else {
+                            window.location.href = "{{ route('products.index') }}";
+                        }
+                    },
+                    error: function(xhr, error, status){
+                        console.log(xhr.responseText);
+                    },
+                });
+            }
+        }
+    </script>
 @endsection
