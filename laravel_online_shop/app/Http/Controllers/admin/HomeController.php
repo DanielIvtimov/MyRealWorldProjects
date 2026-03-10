@@ -4,10 +4,12 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\TempImage;
 use Carbon\Carbon;
 
 class HomeController extends Controller
@@ -45,6 +47,28 @@ class HomeController extends Controller
         $renevueLast30Days = Order::where('status', '!=', 'cancelled')
             ->whereBetween('created_at', [$startOf30Days, $currentDate])
             ->sum('grand_total');
+
+        // Delete temp images older than 1 day
+        $dayBeforeToday = Carbon::now()->subDay();
+
+        $tempImages = TempImage::whereDate('created_at', '<=', $dayBeforeToday)->get();
+
+        foreach ($tempImages as $tempImage) {
+            $path = public_path('/temp/' . $tempImage->name);
+            $thumbPath = public_path('/temp/thumb/' . $tempImage->name);
+
+            // Delete Main Image
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+
+            // Delete Thumb Image
+            if (File::exists($thumbPath)) {
+                File::delete($thumbPath);
+            }
+
+            $tempImage->delete();
+        }
 
         return view('admin.dashboard', compact(
             'totalOrders',
