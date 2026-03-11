@@ -10,9 +10,6 @@ use Intervention\Image\Facades\Image;
 use App\Models\Category;
 use App\Models\TempImage;
 
-
-
-
 class CategoryController extends Controller
 {
     public function index(Request $request)
@@ -49,46 +46,47 @@ class CategoryController extends Controller
                 'showHome' => $request->showHome ?? 'No', 
             ]);
 
-            if(!empty($request->image_id)){
+            if (!empty($request->image_id)) {
                 $tempImage = TempImage::find($request->image_id);
-                if($tempImage){
+                if ($tempImage) {
                     $extArray = explode('.', $tempImage->name);
                     $ext = last($extArray);
                     
-                    $newImageName = $category->id.'.'.$ext;
-                    $sPath = public_path().'/temp/'.$tempImage->name;
-                    $dPath = public_path().'/uploads/category/'.$newImageName;
+                    $newImageName = $category->id . '.' . $ext;
+                    $sPath = public_path('temp/' . $tempImage->name);
+                    $dPath = public_path('uploads/category/' . $newImageName);
                     
                     // Ensure destination directory exists
-                    $destinationDir = public_path().'/uploads/category';
-                    if(!File::exists($destinationDir)){
+                    $destinationDir = public_path('uploads/category');
+                    if (!File::exists($destinationDir)) {
                         File::makeDirectory($destinationDir, 0755, true);
                     }
                     
-                    // Copy file from temp to uploads
-                    if(File::exists($sPath)){
-                        File::copy($sPath, $dPath);
-
-                        // Generate Image Thumbnail 
-                        $thumbPath = public_path().'/uploads/category/thumb/'.$newImageName;
-                        
+                    if (File::exists($sPath)) {
                         // Ensure thumb directory exists
-                        $thumbDir = public_path().'/uploads/category/thumb';
-                        if(!File::exists($thumbDir)){
+                        $thumbDir = public_path('uploads/category/thumb');
+                        if (!File::exists($thumbDir)) {
                             File::makeDirectory($thumbDir, 0755, true);
                         }
-                        
-                        $img = Image::make($sPath);
-                        $img->fit(450, 600, function ($constraint) {
-                            $constraint->aspectRatio();
+
+                        $thumbPath = $thumbDir . '/' . $newImageName;
+
+                        // Create main image
+                        $image = Image::make($sPath)->fit(450, 600, function ($constraint) {
+                            $constraint->upsize();
                         });
-                        $img->save($thumbPath);
-                        
+                        $image->save($dPath);
+
+                        // Create thumbnail
+                        $image->fit(450, 600, function ($constraint) {
+                            $constraint->upsize();
+                        })->save($thumbPath);
+
                         // Update category with image name
                         $category->image = $newImageName;
                         $category->save();
-                        
-                        // Delete temp image
+
+                        // Delete temp image and record
                         File::delete($sPath);
                         $tempImage->delete();
                     }
@@ -134,57 +132,59 @@ class CategoryController extends Controller
             $category->showHome = $request->showHome ?? 'No';
             $category->save();
 
-            if(!empty($request->image_id)){
+            if (!empty($request->image_id)) {
                 $tempImage = TempImage::find($request->image_id);
-                if($tempImage){
+                if ($tempImage) {
                     $extArray = explode('.', $tempImage->name);
                     $ext = last($extArray);
                     
-                    $newImageName = $category->id.'.'.$ext;
-                    $sPath = public_path().'/temp/'.$tempImage->name;
-                    $dPath = public_path().'/uploads/category/'.$newImageName;
+                    $newImageName = $category->id . '.' . $ext;
+                    $sPath = public_path('temp/' . $tempImage->name);
+                    $dPath = public_path('uploads/category/' . $newImageName);
                     
                     // Delete old image if exists
-                    if(!empty($category->image)){
-                        $oldImage = public_path().'/uploads/category/'.$category->image;
-                        $oldThumb = public_path().'/uploads/category/thumb/'.$category->image;
-                        if(File::exists($oldImage)){
+                    if (!empty($category->image)) {
+                        $oldImage = public_path('uploads/category/' . $category->image);
+                        $oldThumb = public_path('uploads/category/thumb/' . $category->image);
+                        if (File::exists($oldImage)) {
                             File::delete($oldImage);
                         }
-                        if(File::exists($oldThumb)){
+                        if (File::exists($oldThumb)) {
                             File::delete($oldThumb);
                         }
                     }
                     
                     // Ensure destination directory exists
-                    $destinationDir = public_path().'/uploads/category';
-                    if(!File::exists($destinationDir)){
+                    $destinationDir = public_path('uploads/category');
+                    if (!File::exists($destinationDir)) {
                         File::makeDirectory($destinationDir, 0755, true);
                     }
                     
                     // Copy file from temp to uploads
-                    if(File::exists($sPath)){
-                        File::copy($sPath, $dPath);
-
-                        // Generate Image Thumbnail 
-                        $thumbPath = public_path().'/uploads/category/thumb/'.$newImageName;
-                        
+                    if (File::exists($sPath)) {
                         // Ensure thumb directory exists
-                        $thumbDir = public_path().'/uploads/category/thumb';
-                        if(!File::exists($thumbDir)){
+                        $thumbDir = public_path('uploads/category/thumb');
+                        if (!File::exists($thumbDir)) {
                             File::makeDirectory($thumbDir, 0755, true);
                         }
-                        
-                        $img = Image::make($sPath);
-                        $img->fit(450, 600, function ($constraint) {
-                            $constraint->aspectRatio();
+
+                        $thumbPath = $thumbDir . '/' . $newImageName;
+
+                        // Create main image
+                        $image = Image::make($sPath)->fit(450, 600, function ($constraint) {
+                            $constraint->upsize();
                         });
-                        $img->save($thumbPath);
-                        
+                        $image->save($dPath);
+
+                        // Create thumbnail
+                        $image->fit(450, 600, function ($constraint) {
+                            $constraint->upsize();
+                        })->save($thumbPath);
+
                         // Update category with image name
                         $category->image = $newImageName;
                         $category->save();
-                        
+
                         // Delete temp image
                         File::delete($sPath);
                         $tempImage->delete();

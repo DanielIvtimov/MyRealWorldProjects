@@ -11,23 +11,29 @@ class TempImagesController extends Controller
 {
     public function create(Request $request)
     {
-        $image = $request->file('image');
-        if(!empty($image)){
-            $ext = $image->getClientOriginalExtension();
+        $imageFile = $request->file('image');
+        if (!empty($imageFile)) {
+            $ext = $imageFile->getClientOriginalExtension();
             $newName = time() . "." . $ext;
 
             $tempImage = new TempImage();
             $tempImage->name = $newName; 
             $tempImage->save();
 
-            $image->move(public_path().'/temp',$newName);
+            $imageFile->move(public_path('temp'), $newName);
 
             // Generate Thumbnail
-            $sourcePath = public_path().'/temp/'.$newName;
-            $destPath = public_path().'/temp/thumb/'.$newName;
+            $sourcePath = public_path('temp/' . $newName);
+            $thumbDir = public_path('temp/thumb');
+            if (!is_dir($thumbDir)) {
+                mkdir($thumbDir, 0755, true);
+            }
+            $destPath = $thumbDir . '/' . $newName;
+
             $image = Image::make($sourcePath);
-            $image->fit(300, 275);
-            $image->save($destPath);
+            $image->fit(300, 275, function ($constraint) {
+                $constraint->upsize();
+            })->save($destPath); 
 
             return response()->json([
                 'status' => true,
