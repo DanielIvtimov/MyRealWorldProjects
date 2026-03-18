@@ -68,4 +68,34 @@ class Coupon extends Model
         }
         return true;
     }
+
+    public function canBeUsedByCustomer($customerId){
+        if(!$this->isValid()){
+            return false;
+        }
+        if($this->usage_limit_per_customer){
+            $usageCount = $this->usages()->where('customer_id', $customerId)->count();
+            if($usageCount >= $this->usage_limit_per_customer){
+                return false;
+            }
+        }
+        return true;
+    }
+    public function calculateDiscount($subTotal){
+        if($this->minimum_order_value && $subTotal < $this->minimum_order_value){
+            return 0;
+        }
+
+        if($this->type === 'percentage'){
+            $discount = ($subTotal * $this->value) / 100;
+        } else {
+            $discount = $this->value;
+        }
+
+        if($this->maximum_discount && $discount > $this->maximum_discount){
+            $discount = $this->maximum_discount;
+        }
+        
+        return min($discount, $subTotal);
+    }
 }
