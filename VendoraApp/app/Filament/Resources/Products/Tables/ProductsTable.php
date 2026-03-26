@@ -74,6 +74,7 @@ class ProductsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'DESC')
             ->filters([
                 TrashedFilter::make(),
             ])
