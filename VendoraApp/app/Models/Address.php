@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use App\Models\Customer;
@@ -10,6 +11,7 @@ use App\Models\Customer;
 
 class Address extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'customer_id',
         'full_name',
