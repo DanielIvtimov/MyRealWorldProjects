@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\Customer;
@@ -11,6 +12,9 @@ use App\Models\Order;
 
 class Review extends Model
 {
+    /** @use HasFactory<\Database\Factories\ReviewFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'product_id',
         'customer_id',

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ProductImage;
 use App\Models\Product;
@@ -12,6 +13,7 @@ use Illuminate\Support\Str;
 
 class ProductVariant extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'product_id',
         'sku',

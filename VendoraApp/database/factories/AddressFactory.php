@@ -29,7 +29,7 @@ class AddressFactory extends Factory
             'postal_code' => fake()->postcode(),
             'country' => fake()->country(),
             'is_default' => fake()->boolean(),
-            'type' => fake()->randomElement(['shipping', 'billing', 'both']),
+            'type' => fake()->randomElement(['shipping', 'billing']),
         ];
     }
     

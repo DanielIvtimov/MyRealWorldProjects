@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Coupons\Tables;
 
+use Carbon\Carbon;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -55,7 +56,7 @@ class CouponsTable
                 TextColumn::make('expires_at')
                     ->dateTime()
                     ->sortable()
-                    ->color(fn($state) => $state && $state->isPast() ? 'danger' : 'gray'),
+                    ->color(fn ($state) => filled($state) && Carbon::parse($state)->isPast() ? 'danger' : 'gray'),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('created_at')

@@ -9,6 +9,7 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -23,35 +24,48 @@ class ProductSeeder extends Seeder
         // Create 100 products
         $this->command->info('Creating 100 products...');
         $bar = $this->command->getOutput()->createProgressBar(100);
+        $bar->start();
 
-        for($i = 0; $i < 100; $i++){
+        for ($i = 0; $i < 100; $i++) {
+            $name = 'Seeded Product '.($i + 1);
+            $slug = Str::slug($name).'-'.$i;
+            $sku = 'SEED-SKU-'.str_pad((string) $i, 5, '0', STR_PAD_LEFT);
+            $price = fake()->randomFloat(2, 9.99, 499.99);
+
             $product = Product::create([
                 'category_id' => $categories->random()->id,
                 'brand_id' => $brands->random()->id,
+                'name' => $name,
+                'slug' => $slug,
+                'sku' => $sku,
+                'price' => $price,
+                'has_variants' => rand(1, 100) <= 30,
             ]);
 
-            // Create 2-4 images per product
-            for($j = 0; $j < rand(2, 4); $j++){
+            // Create 2-4 images per product (image_path is required)
+            for ($j = 0; $j < rand(2, 4); $j++) {
                 ProductImage::create([
                     'product_id' => $product->id,
+                    'image_path' => 'products/seed-placeholder-'.Str::lower(Str::random(8)).'.jpg',
                     'is_primary' => $j === 0,
-                    'sort_order' => $j, 
+                    'sort_order' => $j,
                 ]);
             }
 
-            // Create variants for 30% of products
-            if($product->has_variants){
-                $colors = ['Red', 'Blue', 'Black', 'White', 'Green',];
-                $sizes = ['S', 'M', 'L', 'XL',];
+            // Create variants when product is configured with variants
+            if ($product->has_variants) {
+                $colors = ['Red', 'Blue', 'Black', 'White', 'Green'];
+                $sizes = ['S', 'M', 'L', 'XL'];
 
                 foreach ($colors as $colorIndex => $color) {
                     foreach ($sizes as $sizeIndex => $size) {
-                        if(rand(0, 100) > 50){
+                        if (rand(0, 100) > 50) {
                             ProductVariant::create([
                                 'product_id' => $product->id,
+                                'sku' => 'VAR-'.$product->id.'-'.$colorIndex.'-'.$sizeIndex.'-'.Str::lower(Str::random(4)),
                                 'name' => "$color - $size",
-                                'options' => json_encode(['color' => $color, 'size' => $size]),
-                                'price' => $product->price + rand(0, 20),
+                                'options' => ['color' => $color, 'size' => $size],
+                                'price' => (float) $product->price + rand(0, 20),
                                 'sort_order' => ($colorIndex * count($sizes)) + $sizeIndex,
                             ]);
                         }

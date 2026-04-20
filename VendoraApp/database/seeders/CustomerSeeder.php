@@ -6,8 +6,8 @@ use App\Models\Address;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Review;
-use Hash;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerSeeder extends Seeder
 {
@@ -41,8 +41,9 @@ class CustomerSeeder extends Seeder
         // Create 50 more customers
         $this->command->info('Creating customers...');
         $bar = $this->command->getOutput()->createProgressBar(50);
+        $bar->start();
 
-        for($i = 0; $i < 50; $i++){
+        for ($i = 0; $i < 50; $i++) {
             $customer = Customer::factory()->create();
 
             // Create 1-3 addresses per customer
@@ -50,20 +51,24 @@ class CustomerSeeder extends Seeder
                 'customer_id' => $customer->id,
             ]);
 
-            if(rand(0, 100) > 50){
+            if (rand(0, 100) > 50) {
                 Address::factory()->create([
                     'customer_id' => $customer->id,
                 ]);
             }
 
-            // Create 0-3 reviews per customer
+            // Unique (customer_id, product_id) — one review per product per customer
             $reviewCount = rand(0, 3);
-            for($j = 0; $j < $reviewCount; $j++){
-                Review::factory()->create([
-                    'customer_id' => $customer->id,
-                    'product_id' => Product::inRandomOrder()->first()->id,
-                ]);
+            if ($reviewCount > 0) {
+                $productIds = Product::query()->inRandomOrder()->limit($reviewCount)->pluck('id');
+                foreach ($productIds as $productId) {
+                    Review::factory()->create([
+                        'customer_id' => $customer->id,
+                        'product_id' => $productId,
+                    ]);
+                }
             }
+
             $bar->advance();
         }
         $bar->finish();

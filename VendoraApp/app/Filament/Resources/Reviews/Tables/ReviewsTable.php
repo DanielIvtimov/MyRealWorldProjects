@@ -12,7 +12,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
-use function Laravel\Prompts\search;
 
 class ReviewsTable
 {
@@ -73,7 +72,7 @@ class ReviewsTable
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->action(fn($record) => $record->update(['is_approved' => true]))
-                    ->visible(fn($record) => !record->is_approved)
+                    ->visible(fn ($record) => ! $record->is_approved)
                     ->requiresConfirmation(),
                 Action::make('reject')
                     ->icon('heroicon-o-x-circle')

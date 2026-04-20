@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\ProductVariant;
 
 class ProductImage extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'product_id',
         'product_variant_id',

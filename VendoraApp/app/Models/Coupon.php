@@ -26,6 +26,18 @@ class Coupon extends Model
         'is_active',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'starts_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'is_active' => 'boolean',
+            'value' => 'decimal:2',
+            'minimum_order_value' => 'decimal:2',
+            'maximum_discount' => 'decimal:2',
+        ];
+    }
+
     #[Scope()]
     protected function active(Builder $builder)
     {
@@ -58,14 +70,14 @@ class Coupon extends Model
             return false;
         }
         
-        if($this->expires_at && $this->starts_at->isFuture()){
+        if ($this->starts_at && $this->starts_at->isFuture()) {
             return false;
         }
 
-        if($this->expires_at && $this->expires_at->isPast()){
+        if ($this->expires_at && $this->expires_at->isPast()) {
             return false;
         }
-        if($this->usage_limit && $this->usage->count() >= $this->usage_limit){
+        if ($this->usage_limit && $this->usages()->count() >= $this->usage_limit) {
             return false;
         }
         return true;
