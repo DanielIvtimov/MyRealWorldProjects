@@ -18,5 +18,6 @@ return [
     'views' => true,
     'features' => [
         Features::registration(),
+        Features::resetPasswords(),
     ],
 ];
