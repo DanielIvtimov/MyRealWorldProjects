@@ -3,12 +3,12 @@
 use Laravel\Fortify\Features;
 
 return [
-    'guard' => 'web',
-    'passwords' => 'users',
+    'guard' => 'customer',
+    'passwords' => 'customers',
     'username' => 'email',
     'email' => 'email',
     'lowercase_usernames' => true,
-    'home' => '/dashboard',
+    'home' => '/my-account',
     'prefix' => '',
     'domain' => null,
     'middleware' => ['web'],
